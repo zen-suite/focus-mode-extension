@@ -10,5 +10,6 @@
     "16": "vite.svg",
     "48": "vite.svg",
     "128": "vite.svg"
-  }
+  },
+  "permissions": ["activeTab"]
 }
