@@ -7,9 +7,20 @@
     "default_popup": "index.html"
   },
   "icons": {
-    "16": "vite.svg",
-    "48": "vite.svg",
-    "128": "vite.svg"
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
   },
-  "permissions": ["activeTab"]
+  "background": {
+    "service_worker": "src/background/service-worker.ts",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["public/*.jpg"],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "host_permissions": ["<all_urls>"],
+  "permissions": ["activeTab", "declarativeNetRequest"]
 }
