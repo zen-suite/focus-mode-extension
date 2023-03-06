@@ -1,0 +1,4 @@
+.zen-block-rule-item {
+  display: flex;
+  justify-content: space-between;
+}

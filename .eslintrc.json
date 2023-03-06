@@ -19,7 +19,9 @@
     "react/react-in-jsx-scope": 0,
     "no-console": "error",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-misused-promises": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "react/display-name": "off"
   }
 }
