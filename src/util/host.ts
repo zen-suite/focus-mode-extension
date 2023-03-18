@@ -28,5 +28,7 @@ export async function reloadHostTab(): Promise<void> {
   if (!tabs?.[0].id) {
     return
   }
-  await chrome.tabs.reload(tabs[0].id)
+  await chrome.tabs.reload(tabs[0].id, {
+    bypassCache: true,
+  })
 }

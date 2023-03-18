@@ -35,7 +35,6 @@ export function BlockRulesList(props: IInjectedProps) {
   }
   return (
     <Container
-      maxWidth="sm"
       sx={{
         margin: 0,
       }}

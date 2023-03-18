@@ -7,6 +7,7 @@ import {
   reloadHostTab,
 } from '../util/host'
 import './App.css'
+import { Link } from '@mui/material'
 
 function useIsDomainBlock(): boolean {
   const [isDomainBlocked, setIsDomainBlocked] = useState(false)
@@ -50,17 +51,36 @@ function App(): JSX.Element {
     }
   }
 
+  function goToOptionsPage() {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage()
+    } else {
+      window.open(chrome.runtime.getURL('options.html'))
+    }
+  }
+
   return (
     <div className="App">
       <h1>Zen mode extension</h1>
       <div className="card">
         <button disabled={loading || isDomainBlocked} onClick={blockWebsite}>
-          Block this website.
+          {isDomainBlocked ? 'You cannot block this site': 'Block this site'}
         </button>
+
+        <Link
+          style={{
+            color: 'gray',
+            textDecorationColor: 'gray',
+            cursor: 'pointer',
+          }}
+          marginY={5}
+          display="block"
+          variant="subtitle2"
+          onClick={goToOptionsPage}
+        >
+          Go to options page
+        </Link>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
