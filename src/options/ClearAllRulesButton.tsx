@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { useBlockRules } from './BlockRulesProvider'
+import { useBlockRules } from '../providers/BlockRulesProvider'
 import { clearAllRules } from '../block-rules'
 
 export default function ClearAllRulesButton() {

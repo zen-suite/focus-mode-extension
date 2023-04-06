@@ -1,6 +1,6 @@
 import { Container, Typography } from '@mui/material'
 import BlockRulesList from './BlockRulesList'
-import { BlockRulesProvider } from './BlockRulesProvider'
+import { BlockRulesProvider } from '../providers/BlockRulesProvider'
 import ClearAllRulesButton from './ClearAllRulesButton'
 
 export default function Options(): JSX.Element {
