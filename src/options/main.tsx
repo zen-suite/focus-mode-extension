@@ -1,10 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Options from './Options'
+import AppThemeProvider from '../providers/APpThemeProvider'
 import '../util/fonts'
+import Options from './Options'
+import { CssBaseline } from '@mui/material'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Options />
+    <AppThemeProvider>
+      <CssBaseline enableColorScheme />
+      <Options />
+    </AppThemeProvider>
   </React.StrictMode>
 )

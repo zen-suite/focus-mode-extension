@@ -7,7 +7,7 @@ import {
   reloadHostTab,
 } from '../util/host'
 import './App.css'
-import { Link } from '@mui/material'
+import { CssBaseline, Link } from '@mui/material'
 import AppThemeProvider from '../providers/APpThemeProvider'
 
 function useIsDomainBlock(): boolean {
@@ -62,6 +62,7 @@ function App(): JSX.Element {
 
   return (
     <AppThemeProvider>
+      <CssBaseline enableColorScheme />
       <div className="App">
         <h1>Zen mode extension</h1>
         <div className="card">
