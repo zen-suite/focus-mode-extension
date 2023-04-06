@@ -7,7 +7,7 @@ import {
   reloadHostTab,
 } from '../util/host'
 import './App.css'
-import { CssBaseline, Link } from '@mui/material'
+import { Button, CssBaseline, Link } from '@mui/material'
 import AppThemeProvider from '../providers/APpThemeProvider'
 
 function useIsDomainBlock(): boolean {
@@ -66,9 +66,13 @@ function App(): JSX.Element {
       <div className="App">
         <h1>Zen mode extension</h1>
         <div className="card">
-          <button disabled={loading || isDomainBlocked} onClick={blockWebsite}>
+          <Button
+            disabled={loading || isDomainBlocked}
+            onClick={blockWebsite}
+            variant="outlined"
+          >
             {isDomainBlocked ? 'You cannot block this site' : 'Block this site'}
-          </button>
+          </Button>
 
           <Link
             style={{

@@ -1,4 +1,4 @@
-import { DeleteForever } from '@mui/icons-material'
+import { Delete } from '@mui/icons-material'
 import { IconButton, ListItem, ListItemText } from '@mui/material'
 import { removeBlockRule, type IRule } from '../block-rules'
 
@@ -31,7 +31,7 @@ export function BlockRuleItem(props: IProps & InjectedProps): JSX.Element {
             await props.onRuleDelete(props.rule)
           }}
         >
-          <DeleteForever />
+          <Delete />
         </IconButton>
       }
     >
