@@ -3,10 +3,10 @@ import { useBlockRules } from './BlockRulesProvider'
 import { clearAllRules } from '../block-rules'
 
 export default function ClearAllRulesButton() {
-  const { refetchRules } = useBlockRules()
+  const { refetchRules, blockRules } = useBlockRules()
   async function onClick() {
     const isConfirm = confirm(
-      'Are you sure you want to delete all rules?(This cannot be undone)'
+      'Are you sure you want to delete all blocked sites? (This cannot be undone)'
     )
     if (!isConfirm) {
       return
@@ -15,7 +15,12 @@ export default function ClearAllRulesButton() {
     await refetchRules()
   }
   return (
-    <Button onClick={onClick} variant="contained" color="error">
+    <Button
+      onClick={onClick}
+      variant="contained"
+      color="error"
+      disabled={!blockRules.length}
+    >
       Clear all rules
     </Button>
   )
