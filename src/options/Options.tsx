@@ -1,21 +1,42 @@
-import { Button } from '@mui/material'
-import { clearAllRules } from '../block-rules'
+import { Container, Typography } from '@mui/material'
 import BlockRulesList from './BlockRulesList'
+import { BlockRulesProvider } from './BlockRulesProvider'
+import ClearAllRulesButton from './ClearAllRulesButton'
 
 export default function Options(): JSX.Element {
   return (
-    <div>
-      <h1>Hello from Zen mode options (With HOt Reload)</h1>
-      <Button onClick={clearAllRules} variant="contained" color="error">
-        Clear all rules
-      </Button>
-      <section
-        style={{
-          margin: '15px 0px',
-        }}
-      >
-        <BlockRulesList />
-      </section>
-    </div>
+    <BlockRulesProvider>
+      <Container maxWidth="sm">
+        <Typography variant="h6" marginBottom="30px">
+          Settings
+          <hr />
+        </Typography>
+        <section
+          style={{
+            margin: '15px 0px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '15px',
+              alignItems: 'center',
+            }}
+          >
+            <Typography fontWeight="bold">Blocked sites</Typography>
+            <ClearAllRulesButton />
+          </div>
+          <div
+            style={{
+              border: '0.5px solid gray',
+              borderRadius: '10px',
+            }}
+          >
+            <BlockRulesList />
+          </div>
+        </section>
+      </Container>
+    </BlockRulesProvider>
   )
 }
