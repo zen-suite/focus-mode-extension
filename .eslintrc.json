@@ -23,5 +23,10 @@
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "react/display-name": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "^18.2.0"
+    }
   }
 }
