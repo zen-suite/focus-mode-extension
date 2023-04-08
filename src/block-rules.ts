@@ -20,7 +20,7 @@ export async function addBlockRule(domain: string): Promise<void> {
           },
         },
         condition: {
-          urlFilter: domain,
+          requestDomains: [domain],
           resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
         },
       },
@@ -66,12 +66,12 @@ export async function getBlockRules(): Promise<IRule[]> {
 export function transformChromeRuleToIRule(
   rule: chrome.declarativeNetRequest.Rule
 ): IRule {
-  if (!rule.condition.urlFilter) {
-    throw new Error('Undefined condition.urlFilter not allowed.')
+  if (!rule.condition.requestDomains?.length) {
+    throw new Error('Undefined condition.requestDomains not allowed.')
   }
   return {
     id: rule.id,
-    domain: rule.condition.urlFilter,
+    domain: rule.condition.requestDomains[0],
     actionType: rule.action.type,
   }
 }
