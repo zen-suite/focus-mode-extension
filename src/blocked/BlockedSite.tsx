@@ -1,20 +1,13 @@
+import { Typography } from '@mui/material'
+import styles from './BlockedSite.module.css'
+
 export default function BlockedSite() {
   return (
     <div>
-      <div
-        style={{
-          backgroundImage: "url('/example.jpg')",
-          width: '100vw',
-          height: '100vh',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-          zIndex: '-1',
-          position: 'absolute',
-          filter: 'brightness(60%)',
-        }}
-      />
-      Hello world
+      <div className={styles.background} />
+      <Typography className={styles.headerBanner} variant="h4">
+        This website is blocked
+      </Typography>
     </div>
   )
 }

@@ -22,13 +22,3 @@ export function isHttpProtocol(url: string | undefined): boolean {
   const urlObj = new URL(url)
   return urlObj.protocol.startsWith('http')
 }
-
-export async function reloadHostTab(): Promise<void> {
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
-  if (!tabs?.[0].id) {
-    return
-  }
-  await chrome.tabs.reload(tabs[0].id, {
-    bypassCache: true,
-  })
-}
