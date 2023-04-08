@@ -1,14 +1,9 @@
+import { Button, CssBaseline, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { addBlockRule, findBlockRuleByDomain } from '../block-rules'
-import {
-  getHostDomain,
-  getHostUrl,
-  isHttpProtocol,
-  reloadHostTab,
-} from '../util/host'
+import AppThemeProvider from '../providers/AppThemeProvider'
+import { getHostDomain, getHostUrl, isHttpProtocol } from '../util/host'
 import './App.css'
-import { Button, CssBaseline, Link } from '@mui/material'
-import AppThemeProvider from '../providers/APpThemeProvider'
 
 function useIsDomainBlock(): boolean {
   const [isDomainBlocked, setIsDomainBlocked] = useState(false)
@@ -46,7 +41,6 @@ function App(): JSX.Element {
       }
 
       await addBlockRule(currentDomain)
-      await reloadHostTab()
     } finally {
       setLoading(false)
     }
