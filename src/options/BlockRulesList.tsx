@@ -41,7 +41,6 @@ export function BlockRulesList(props: IInjectedProps) {
             rule={rule}
             key={rule.id}
             onRuleDeleted={async () => {
-              alert(`${rule.domain} has been removed successfully.`)
               await props.refetchData()
             }}
           />
