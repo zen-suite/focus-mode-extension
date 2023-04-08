@@ -75,11 +75,3 @@ export function transformChromeRuleToIRule(
     actionType: rule.action.type,
   }
 }
-
-export async function clearAllRules(): Promise<void> {
-  const ruleIds = (await getBlockRules()).map((rule) => rule.id)
-
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: ruleIds,
-  })
-}
