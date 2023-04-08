@@ -25,7 +25,7 @@ export function BlockRulesProvider(props: React.PropsWithChildren<any>) {
   return (
     <BlockRulesContext.Provider
       value={{
-        blockRules: data ?? [],
+        blockRules: data?.slice().reverse() ?? [],
         error,
         refetchRules: fetchData,
         loading,

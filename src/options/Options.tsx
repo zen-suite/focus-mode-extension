@@ -1,13 +1,14 @@
 import { Container, Typography } from '@mui/material'
-import BlockRulesList from './BlockRulesList'
 import { BlockRulesProvider } from '../providers/BlockRulesProvider'
+import AddBlockRule from './AddBlockRule'
+import BlockRulesList from './BlockRulesList'
 import ClearAllRulesButton from './ClearAllRulesButton'
 
 export default function Options(): JSX.Element {
   return (
     <BlockRulesProvider>
       <Container maxWidth="sm">
-        <Typography variant="h6" marginBottom="30px">
+        <Typography variant="h6" marginY="25px">
           Settings
           <hr />
         </Typography>
@@ -27,6 +28,7 @@ export default function Options(): JSX.Element {
             <Typography fontWeight="bold">Blocked sites</Typography>
             <ClearAllRulesButton />
           </div>
+          <AddBlockRule />
           <div
             style={{
               border: '0.5px solid gray',
