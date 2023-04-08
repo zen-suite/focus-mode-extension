@@ -28,8 +28,8 @@ export function BlockRulesList(props: IInjectedProps) {
 
   if (!props.rules?.length && !props.loading) {
     return (
-      <Typography variant="subtitle2" padding="10px">
-        No rules found. Please add them first
+      <Typography variant="subtitle2" padding="15px 10px">
+        You have not blocked any websites yet.
       </Typography>
     )
   }

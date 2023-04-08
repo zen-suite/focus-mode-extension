@@ -9,9 +9,16 @@ import {
   normalizeHttpUrl,
 } from '../util/host'
 
-export default function AddBlockRule() {
-  const { refetchRules } = useBlockRules()
+interface IInnerProps {
+  onRuleAdded: (value: string) => void
+}
 
+export default () => {
+  const { refetchRules } = useBlockRules()
+  return <AddBlockRule onRuleAdded={refetchRules} />
+}
+
+export function AddBlockRule(props: IInnerProps) {
   const [value, setValue] = useState('')
 
   const isValueValid = useMemo(() => {
@@ -23,7 +30,7 @@ export default function AddBlockRule() {
       return
     }
     await addBlockRule(extractDomain(normalizeHttpUrl(value)))
-    await refetchRules()
+    props.onRuleAdded(value)
     setValue('')
   }
 
