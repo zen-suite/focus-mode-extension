@@ -1,7 +1,7 @@
 import { CircularProgress, List, Typography } from '@mui/material'
 import { type IRule } from '../block-rules'
-import BlockRuleItem from './BlockRuleItem'
 import { useBlockRules } from '../providers/BlockRulesProvider'
+import BlockRuleItem from './BlockRuleItem'
 
 interface IInjectedProps {
   rules: IRule[] | undefined
