@@ -20,7 +20,7 @@ export const manifest: ManifestV3Export = {
   },
   web_accessible_resources: [
     {
-      resources: ['public/*.jpg', 'public/*.html'],
+      resources: ['public/*.jpg', 'src/blocked/**'],
       matches: ['*://*/*'],
     },
   ],

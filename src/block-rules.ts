@@ -4,7 +4,7 @@ export interface IRule {
   actionType: chrome.declarativeNetRequest.RuleActionType
 }
 
-export const redirectExtensionPath = '/example.jpg'
+export const redirectExtensionPath = '/src/blocked/index.html'
 
 export async function addBlockRule(domain: string): Promise<void> {
   const existingRule = await findBlockRuleByDomain(domain)
