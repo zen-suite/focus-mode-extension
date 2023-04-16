@@ -1,0 +1,8 @@
+**/dist
+**/node_modules
+
+src/background/*
+manifest.ts
+
+vite.config.ts
+vite-env.d.ts
