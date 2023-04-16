@@ -5,8 +5,12 @@ on:
       - 'synchronize'
       - 'opened'
       - 'reopened'
+  push:
+    branches:
+      - 'dev'
+      - 'main'
 jobs:
-  Installing-Dependencies:
+  verify-pr:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository code
