@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - 'main'
-permissions: read-all|write-all
+permissions: write-all
 jobs:
   verify-pr:
     runs-on: ubuntu-22.04
