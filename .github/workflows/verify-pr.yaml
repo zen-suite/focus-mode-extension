@@ -8,15 +8,10 @@ on:
   push:
     branches:
       - 'main'
-permissions: write-all
 jobs:
   verify-pr:
     runs-on: ubuntu-22.04
     steps:
-      - name: Verify PR title
-        uses: amannn/action-semantic-pull-request@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout repository code
         uses: actions/checkout@v3
       - name: Installing Node.js
