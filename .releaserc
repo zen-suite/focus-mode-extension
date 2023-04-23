@@ -1,0 +1,19 @@
+{
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/*",
+            "name": "Extension",
+            "label": "Download this file to install extension."
+          }
+        ]
+      }
+    ]
+  ]
+}

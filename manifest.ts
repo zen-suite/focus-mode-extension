@@ -4,7 +4,7 @@ export const manifest: ManifestV3Export = {
   manifest_version: 3,
   name: 'Zen mode',
   description: 'An extension for blocking websites to keep you in zen.',
-  version: '0.0.1',
+  version: process.env.npm_package_version,
   action: {
     default_popup: 'index.html',
   },
