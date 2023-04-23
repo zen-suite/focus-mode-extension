@@ -7,6 +7,7 @@ on:
       - 'main'
     types:
       - 'completed'
+permissions: write-all
 jobs:
   release-extension:
     runs-on: ubuntu-22.04
