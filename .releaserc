@@ -8,9 +8,9 @@
       {
         "assets": [
           {
-            "path": "dist/*",
+            "path": "dist.zip",
             "name": "Extension",
-            "label": "Download this file to install extension."
+            "label": "Download this file to install extension (${nextRelease.gitTag})."
           }
         ]
       }
