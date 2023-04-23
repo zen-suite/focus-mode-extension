@@ -1,7 +1,7 @@
 {
   "name": "focus-mode-extension",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "engines": {
     "node": "18.14.2"
@@ -13,7 +13,8 @@
     "lint": "eslint -c .eslintrc.json .",
     "lint:fix": "yarn lint --fix",
     "fmt:check": "prettier --check .",
-    "fmt:write": "prettier --write ."
+    "fmt:write": "prettier --write .",
+    "extract:version": "ts-node --esm bin/extract-version.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@crxjs/vite-plugin": "^1.0.14",
     "@types/chrome": "^0.0.219",
+    "@types/node": "^18.15.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
@@ -41,6 +43,8 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.7",
+    "semantic-release": "^21.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "*",
     "vite": "^4.1.0"
   }
