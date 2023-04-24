@@ -1,8 +1,8 @@
 import { Add } from '@mui/icons-material'
 import { Box, Button, FormHelperText, Input } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { addBlockRule } from '../block-rules'
-import { useBlockRules } from '../providers/BlockRulesProvider'
+import { addBlockedSite } from '../domain/block-site'
+import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import {
   extractDomain,
   isValidHttpDomain,
@@ -10,27 +10,27 @@ import {
 } from '../util/host'
 
 interface IInnerProps {
-  onRuleAdded: (value: string) => void
+  onSiteAdded: (value: string) => void
 }
 
 export default () => {
-  const { refetchRules } = useBlockRules()
-  return <AddBlockRule onRuleAdded={refetchRules} />
+  const { refetchBlockedSites } = useBlockedSites()
+  return <AddBlockedSite onSiteAdded={refetchBlockedSites} />
 }
 
-export function AddBlockRule(props: IInnerProps) {
+export function AddBlockedSite(props: IInnerProps) {
   const [value, setValue] = useState('')
 
   const isValueValid = useMemo(() => {
     return isValidHttpDomain(normalizeHttpUrl(value))
   }, [value])
 
-  async function addRule() {
+  async function addSite() {
     if (!isValueValid) {
       return
     }
-    await addBlockRule(extractDomain(normalizeHttpUrl(value)))
-    props.onRuleAdded(value)
+    await addBlockedSite(extractDomain(normalizeHttpUrl(value)))
+    props.onSiteAdded(value)
     setValue('')
   }
 
@@ -60,7 +60,7 @@ export function AddBlockRule(props: IInnerProps) {
             if (event.key.toLowerCase() !== 'enter') {
               return
             }
-            addRule()
+            addSite()
           }}
           onChange={(event) => {
             setValue(event.target.value)
@@ -84,7 +84,7 @@ export function AddBlockRule(props: IInnerProps) {
           startIcon={<Add />}
           disabled={!isValueValid}
           aria-disabled={!isValueValid}
-          onClick={addRule}
+          onClick={addSite}
         >
           Add site
         </Button>
