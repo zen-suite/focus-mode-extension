@@ -14,7 +14,7 @@
     "sourceType": "module",
     "project": ["tsconfig.json", "tsconfig.node.json"]
   },
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": 0,
     "no-console": "error",
@@ -23,7 +23,9 @@
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "react/display-name": "off",
-    "import/order": "error"
+    "import/order": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error"
   },
   "settings": {
     "react": {
