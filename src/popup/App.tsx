@@ -1,6 +1,6 @@
 import { Button, CssBaseline, Link } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { addBlockRule, findBlockRuleByDomain } from '../block-rules'
+import { addBlockedSite, findBlockedSiteByDomain } from '../domain/block-site'
 import AppThemeProvider from '../providers/AppThemeProvider'
 import { getHostDomain, getHostUrl, isHttpProtocol } from '../util/host'
 import './App.css'
@@ -15,8 +15,8 @@ function useIsDomainBlock(): boolean {
       setIsDomainBlocked(true)
       return
     }
-    const rule = await findBlockRuleByDomain(currentDomain)
-    setIsDomainBlocked(!!rule)
+    const blockedSite = await findBlockedSiteByDomain(currentDomain)
+    setIsDomainBlocked(!!blockedSite)
   }
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function App(): JSX.Element {
         return
       }
 
-      await addBlockRule(currentDomain)
+      await addBlockedSite(currentDomain)
     } finally {
       setLoading(false)
     }
