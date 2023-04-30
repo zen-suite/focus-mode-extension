@@ -3,6 +3,16 @@
     "main"
   ],
   "plugins": [
+    "@semantic-release/npm",
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json"
+        ],
+        "message": "chore(release): [skip ci] bump package.json to ${nextRelease.version}"
+      }
+    ],
     [
       "@semantic-release/github",
       {

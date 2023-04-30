@@ -23,11 +23,11 @@ jobs:
         run: npm i -g yarn
       - name: Installing Project Dependencies
         run: yarn install --frozen-lockfile
-      - name: Build project
-        run: yarn run build
-      - name: Zip Built assets
-        run: zip -r dist.zip dist
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+      - name: Build project
+        run: yarn run build
+      - name: Zip Built assets
+        run: zip -r dist.zip dist

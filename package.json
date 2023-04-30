@@ -14,7 +14,7 @@
     "lint:fix": "yarn lint --fix",
     "fmt:check": "prettier --check .",
     "fmt:write": "prettier --write .",
-    "extract:version": "ts-node --esm bin/extract-version.ts"
+    "release": "semantic-release"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -29,6 +29,8 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^1.0.14",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^10.0.3",
     "@types/chrome": "^0.0.219",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.27",
