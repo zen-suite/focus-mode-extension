@@ -1,1 +1,0 @@
-yarn run build && zip -r dist.zip dist
