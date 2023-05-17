@@ -23,6 +23,8 @@ jobs:
         run: npm i -g yarn
       - name: Installing Project Dependencies
         run: yarn install --frozen-lockfile
+      - name: Build Artifact
+        run: yarn release:build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
