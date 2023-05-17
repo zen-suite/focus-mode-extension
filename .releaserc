@@ -1,22 +1,12 @@
 {
-  "branches": [
-    "main"
-  ],
+  "branches": ["main"],
   "plugins": [
     "@semantic-release/npm",
     [
       "@semantic-release/git",
       {
-        "assets": [
-          "package.json"
-        ],
+        "assets": ["package.json"],
         "message": "chore(release): [skip ci] bump package.json to ${nextRelease.version}"
-      }
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "./bin/build-asset.sh"
       }
     ],
     [
