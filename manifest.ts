@@ -2,17 +2,17 @@ import { type ManifestV3Export } from '@crxjs/vite-plugin'
 
 export const manifest: ManifestV3Export = {
   manifest_version: 3,
-  name: 'Zen mode',
-  description: 'An extension for blocking websites to keep you in zen.',
+  name: 'Zen mode - Block distraction',
+  description: 'An extension for blocking websites to keep you in zen mode',
   version: process.env.npm_package_version,
   action: {
     default_popup: 'index.html',
   },
   options_page: 'src/options/index.html',
   icons: {
-    16: 'logo.png',
-    48: 'logo.png',
-    128: 'logo.png',
+    16: 'logo16.png',
+    48: 'logo48.png',
+    128: 'logo128.png',
   },
   background: {
     service_worker: 'src/background/service-worker.ts',
