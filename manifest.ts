@@ -10,9 +10,7 @@ export const manifest: ManifestV3Export = {
   },
   options_page: 'src/options/index.html',
   icons: {
-    16: 'logo16.png',
-    48: 'logo48.png',
-    128: 'logo128.png',
+    128: 'logo.png',
   },
   background: {
     service_worker: 'src/background/service-worker.ts',
