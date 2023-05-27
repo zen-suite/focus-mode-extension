@@ -1,3 +1,7 @@
+<div style="text-align: center">
+    <img src="./public/logo.png" alt="Logo"/>
+</div>
+
 # Zen Mode
 
 Focus mode chrome extension that you can block unlimited number of websites.
