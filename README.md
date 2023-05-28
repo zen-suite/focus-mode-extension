@@ -6,6 +6,10 @@
 
 Focus mode chrome extension that you can block unlimited number of websites.
 
+## Download and Install
+
+Head to the [releases](https://github.com/zen-suite/focus-mode-extension/releases) page to download extension. After downloading zip file, unzip the file. Then, follow instruction [here](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked) to load unpack extension.
+
 ## Development
 
 ### Prerequisites
