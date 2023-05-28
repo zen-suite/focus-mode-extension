@@ -22,6 +22,5 @@ export const manifest: ManifestV3Export = {
       matches: ['*://*/*'],
     },
   ],
-  host_permissions: ['<all_urls>'],
   permissions: ['activeTab', 'declarativeNetRequest', 'tabs'],
 }
