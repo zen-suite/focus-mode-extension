@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-export function useQuery<T = any>(queryFn: () => Promise<T>) {
+export function useQuery<T = any, FunctionArgs = any>(
+  queryFn: (args?: FunctionArgs) => Promise<T>,
+  functionArgs?: FunctionArgs
+) {
   const [data, setData] = useState<T | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error>()
 
-  async function refetchData(): Promise<void> {
+  const fetchData = async (args: typeof functionArgs): Promise<void> => {
     try {
       setLoading(true)
-      const fetchedData = await queryFn()
+      const fetchedData = await queryFn(args)
       setData(fetchedData)
     } catch (error) {
       setError(error as Error)
@@ -17,14 +20,10 @@ export function useQuery<T = any>(queryFn: () => Promise<T>) {
     }
   }
 
-  useEffect(() => {
-    refetchData()
-  }, [])
-
   return {
     data,
     loading,
     error,
-    fetchData: refetchData,
+    fetchData,
   }
 }

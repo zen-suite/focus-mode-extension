@@ -15,7 +15,13 @@ interface IInnerProps {
 
 export default () => {
   const { refetchBlockedSites } = useBlockedSites()
-  return <AddBlockedSite onSiteAdded={refetchBlockedSites} />
+  return (
+    <AddBlockedSite
+      onSiteAdded={async () => {
+        await refetchBlockedSites()
+      }}
+    />
+  )
 }
 
 export function AddBlockedSite(props: IInnerProps) {
