@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
   getBlockedSites,
   searchBlockSites,
@@ -24,18 +24,17 @@ export const BlockedSitesContext =
   React.createContext<IBlockedSitesContext>(defaultContext)
 
 export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
-  const queryBlockSites = async (searchValue?: string) => {
+  const queryBlockSites = useCallback(async (searchValue?: string) => {
     if (!searchValue?.trim()) {
       return await getBlockedSites()
     }
     return await searchBlockSites(searchValue)
-  }
+  }, [])
   const { data, error, fetchData, loading } = useQuery(queryBlockSites)
 
   useEffect(() => {
     fetchData(undefined)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fetchData])
 
   return (
     <BlockedSitesContext.Provider
