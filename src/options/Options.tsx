@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from '@mui/material'
 import { BlockedSitesProvider } from '../providers/BlockedSitesProvider'
-import AddBlockedSite from './AddBlockedSite'
+import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
 
 export default function Options(): JSX.Element {
@@ -12,7 +12,7 @@ export default function Options(): JSX.Element {
           <hr />
         </Typography>
         <Box>
-          <AddBlockedSite />
+          <AddOrSearchBlockedSite />
           <div
             style={{
               border: '0.5px solid gray',
