@@ -4,7 +4,7 @@
 
 # Zen Mode
 
-Focus mode chrome extension that you can block unlimited number of websites.
+Focus mode chrome extension that you can block websites up to 5000 domains([determined by Chrome](https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/#property-MAX_NUMBER_OF_DYNAMIC_AND_SESSION_RULES)).
 
 [![Release Extension](https://github.com/zen-suite/focus-mode-extension/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/zen-suite/focus-mode-extension/actions/workflows/release.yaml)
 

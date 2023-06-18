@@ -20,7 +20,7 @@ export async function addBlockedSite(domain: string): Promise<void> {
           },
         },
         condition: {
-          requestDomains: [domain],
+          urlFilter: `||${domain}`,
           resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
         },
       },
@@ -66,12 +66,12 @@ export async function getBlockedSites(): Promise<IBlockedSite[]> {
 export function transformChromeRuleToIBlockedSite(
   rule: chrome.declarativeNetRequest.Rule
 ): IBlockedSite {
-  if (!rule.condition.requestDomains?.length) {
-    throw new Error('Undefined condition.requestDomains not allowed.')
-  }
   return {
     id: rule.id,
-    domain: rule.condition.requestDomains[0],
+    domain:
+      rule.condition.requestDomains?.[0] ??
+      rule.condition.urlFilter?.replace('||', '') ??
+      '',
     actionType: rule.action.type,
   }
 }
