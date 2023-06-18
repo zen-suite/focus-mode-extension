@@ -1,5 +1,6 @@
+import { Button, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Link, Typography } from '@mui/material'
+import AppLink from '../components/AppLink'
 import { addBlockedSite, type IBlockedSite } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import { getHostDomain, getHostUrl, isHttpProtocol } from '../util/host'
@@ -124,18 +125,14 @@ export function AppContent(props: IInjectedProps) {
           </Typography>
         )}
 
-        <Link
-          style={{
-            textDecorationColor: 'gray',
-            cursor: 'pointer',
-          }}
+        <AppLink
           marginY={5}
           display="block"
           variant="subtitle2"
           onClick={props.goToOptionsPage}
         >
           Go to options page
-        </Link>
+        </AppLink>
       </div>
     </div>
   )

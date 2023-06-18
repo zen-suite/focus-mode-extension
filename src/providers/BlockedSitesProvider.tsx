@@ -1,10 +1,14 @@
-import React, { useContext } from 'react'
-import { getBlockedSites, type IBlockedSite } from '../domain/block-site'
+import React, { useCallback, useContext, useEffect } from 'react'
+import {
+  getBlockedSites,
+  searchBlockSites,
+  type IBlockedSite,
+} from '../domain/block-site'
 import { useQuery } from '../hooks/useQuery'
 
 interface IBlockedSitesContext {
   blockedSites: IBlockedSite[]
-  refetchBlockedSites: () => Promise<void>
+  refetchBlockedSites: (searchValue?: string) => Promise<void>
   error: ReturnType<typeof useQuery>['error']
   loading: boolean
 }
@@ -20,7 +24,17 @@ export const BlockedSitesContext =
   React.createContext<IBlockedSitesContext>(defaultContext)
 
 export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
-  const { data, error, fetchData, loading } = useQuery(getBlockedSites)
+  const queryBlockSites = useCallback(async (searchValue?: string) => {
+    if (!searchValue?.trim()) {
+      return await getBlockedSites()
+    }
+    return await searchBlockSites(searchValue)
+  }, [])
+  const { data, error, fetchData, loading } = useQuery(queryBlockSites)
+
+  useEffect(() => {
+    fetchData(undefined)
+  }, [fetchData])
 
   return (
     <BlockedSitesContext.Provider

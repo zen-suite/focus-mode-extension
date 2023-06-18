@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
-export function useQuery<T = any>(queryFn: () => Promise<T>) {
+export function useQuery<T = any, FunctionArgs = any>(
+  queryFn: (args?: FunctionArgs) => Promise<T>,
+  functionArgs?: FunctionArgs
+) {
   const [data, setData] = useState<T | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error>()
 
-  async function refetchData(): Promise<void> {
-    try {
-      setLoading(true)
-      const fetchedData = await queryFn()
-      setData(fetchedData)
-    } catch (error) {
-      setError(error as Error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    refetchData()
-  }, [])
+  const fetchData = useCallback(
+    async (args: typeof functionArgs): Promise<void> => {
+      try {
+        setLoading(true)
+        const fetchedData = await queryFn(args)
+        setData(fetchedData)
+      } catch (error) {
+        setError(error as Error)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [queryFn]
+  )
 
   return {
     data,
     loading,
     error,
-    fetchData: refetchData,
+    fetchData,
   }
 }
