@@ -25,7 +25,11 @@
     "react/display-name": "off",
     "import/order": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react-hooks/rules-of-hooks": "error"
+    "react-hooks/rules-of-hooks": "error",
+    "@typescript-eslint/consistent-indexed-object-style": [
+      "error",
+      "index-signature"
+    ]
   },
   "settings": {
     "react": {

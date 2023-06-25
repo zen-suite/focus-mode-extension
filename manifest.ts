@@ -28,7 +28,9 @@ export const manifest: ManifestV3Export = {
     // This permission is need for redirecting
     'declarativeNetRequestWithHostAccess',
     'tabs',
+    'unlimitedStorage',
   ],
+  optional_permissions: ['storage'],
   // Host permissions for all urls is needed because websites to block are determined by users.
   // Thus extension does not know which urls to block in advance
   host_permissions: ['<all_urls>'],
