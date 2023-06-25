@@ -1,11 +1,17 @@
 {
-  "branches": ["main"],
+  "branches": [
+    "main"
+  ],
   "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
     "@semantic-release/npm",
     [
       "@semantic-release/git",
       {
-        "assets": ["package.json"],
+        "assets": [
+          "package.json"
+        ],
         "message": "chore(release): [skip ci] bump package.json to ${nextRelease.version}"
       }
     ],
