@@ -1,4 +1,4 @@
-import { getStorageInstance, isStorageAllowed } from '../../storage'
+import { getStorageInstance, requestStoragePermission } from '../../storage'
 import { getBlockedSites, type IBlockedSite } from './block-site'
 import { NotEnoughPermissionError } from './errors'
 
@@ -15,7 +15,7 @@ export const initialBlockedSiteSchema: IBlockedSiteSchema = {
 }
 
 export async function syncBlockSites() {
-  const storageAllowed = await isStorageAllowed()
+  const storageAllowed = await requestStoragePermission()
   if (!storageAllowed) {
     throw new NotEnoughPermissionError('storage')
   }
