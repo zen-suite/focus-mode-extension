@@ -1,28 +1,29 @@
 import { Box, Container, Typography } from '@mui/material'
 import { BlockedSitesProvider } from '../providers/BlockedSitesProvider'
-import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
-import BlockedSitesList from './BlockedSitesList'
+import BlockedSitesSection from './BlockedSitesSection'
+import styles from './Options.module.css'
+import SettingsList from './SettingsList'
 
 export default function Options(): JSX.Element {
   return (
     <BlockedSitesProvider>
-      <Container maxWidth="sm">
-        <Typography variant="h6" marginY="15px">
-          Settings
-          <hr />
-        </Typography>
-        <Box>
-          <AddOrSearchBlockedSite />
-          <div
-            style={{
-              border: '0.5px solid gray',
-              borderRadius: '10px',
-            }}
-          >
-            <BlockedSitesList />
-          </div>
+      <Typography
+        variant="h6"
+        paddingX={4}
+        paddingY={2}
+        borderBottom={1}
+        borderColor="primary.dark"
+      >
+        Settings
+      </Typography>
+      <div className={styles.container}>
+        <Box minWidth={300} borderRight={1} borderColor="primary.dark">
+          <SettingsList />
         </Box>
-      </Container>
+        <Box flexGrow={1} paddingX={4}>
+          <BlockedSitesSection />
+        </Box>
+      </div>
     </BlockedSitesProvider>
   )
 }

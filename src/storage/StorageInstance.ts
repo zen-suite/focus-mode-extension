@@ -7,13 +7,22 @@ class StorageInstance<T extends { [key: string]: any }> {
 
   async set(data: T) {
     await this.storageArea.set({
-      ...this.initialData,
-      ...data,
+      [this.tableName]: {
+        ...this.initialData,
+        ...data,
+      },
     })
   }
 
+  async update<K extends keyof T>(key: K, data: T[K]) {
+    const existingData = await this.get()
+    existingData[key] = data
+    await this.set(existingData)
+  }
+
   async get(): Promise<T> {
-    return (await this.storageArea.get(this.tableName)) as T
+    const allData = await this.storageArea.get()
+    return allData[this.tableName]
   }
 }
 
@@ -30,6 +39,7 @@ export function getStorageInstance<T extends { [key: string]: any }>(
   if (instancesMap[tableName]) {
     return instancesMap[tableName]
   }
+
   const instance = new StorageInstance<T>(
     chrome.storage.local,
     tableName,

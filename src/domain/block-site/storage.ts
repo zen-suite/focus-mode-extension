@@ -16,16 +16,18 @@ export const initialBlockedSiteSchema: IBlockedSiteSchema = {
 
 export async function syncBlockSites() {
   const storageAllowed = await requestStoragePermission()
+  console.log("🚀 ~ file: storage.ts:19 ~ syncBlockSites ~ storageAllowed:", storageAllowed)
   if (!storageAllowed) {
     throw new NotEnoughPermissionError('storage')
   }
   const allBlockedSites = await getBlockedSites()
-  const storageArea = getStorageInstance(
-    BLOCKED_SITE_TABLE_NAME,
-    initialBlockedSiteSchema
-  )
+  const storageArea = getBlockedSiteStorageInstance()
   await storageArea.set({
     ...initialBlockedSiteSchema,
     blockedSites: allBlockedSites,
   })
+}
+
+export function getBlockedSiteStorageInstance() {
+  return getStorageInstance(BLOCKED_SITE_TABLE_NAME, initialBlockedSiteSchema)
 }
