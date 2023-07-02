@@ -1,12 +1,12 @@
 import { Box, TextField } from '@mui/material'
 import {
-  type KeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
   useState,
+  type KeyboardEvent,
 } from 'react'
-import { addBlockedSite } from '../domain/block-site'
+import { getBlockSiteStorage } from '../domain/block-site'
 import { useDebounce } from '../hooks/useDebouce'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import {
@@ -21,7 +21,7 @@ interface IInnerProps {
 }
 
 export default () => {
-  const { refetchBlockedSites, blockedSites } = useBlockedSites()
+  const { refetchSchema: refetchBlockedSites, blockedSites } = useBlockedSites()
   return (
     <AddOrSearchBlockedSite
       onFetchSites={refetchBlockedSites}
@@ -55,7 +55,9 @@ export function AddOrSearchBlockedSite({
         if (!isValueValid) {
           return
         }
-        await addBlockedSite(extractDomain(normalizeHttpUrl(value)))
+        await getBlockSiteStorage().addBlockSite(
+          extractDomain(normalizeHttpUrl(value))
+        )
         onFetchSites(value)
         setValue('')
       }

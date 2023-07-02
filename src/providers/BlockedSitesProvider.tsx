@@ -1,21 +1,19 @@
 import React, { useCallback, useContext, useEffect } from 'react'
-import {
-  getBlockedSites,
-  searchBlockSites,
-  type IBlockedSite,
-} from '../domain/block-site'
+import { getBlockSiteStorage, type IBlockedSite } from '../domain/block-site'
 import { useQuery } from '../hooks/useQuery'
 
 interface IBlockedSitesContext {
   blockedSites: IBlockedSite[]
-  refetchBlockedSites: (searchValue?: string) => Promise<void>
+  enabledBlocking: boolean
+  refetchSchema: (searchValue?: string) => Promise<void>
   error: ReturnType<typeof useQuery>['error']
   loading: boolean
 }
 
 const defaultContext: IBlockedSitesContext = {
   blockedSites: [],
-  refetchBlockedSites: async () => {},
+  enabledBlocking: true,
+  refetchSchema: async () => {},
   loading: false,
   error: undefined,
 }
@@ -24,13 +22,25 @@ export const BlockedSitesContext =
   React.createContext<IBlockedSitesContext>(defaultContext)
 
 export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
-  const queryBlockSites = useCallback(async (searchValue?: string) => {
+  const fetchBlockSitesSchema = useCallback(async (searchValue?: string) => {
+    const schema = await getBlockSiteStorage().get()
     if (!searchValue?.trim()) {
-      return await getBlockedSites()
+      return schema
     }
-    return await searchBlockSites(searchValue)
+    return {
+      ...schema,
+      blockedSites: schema.blockedSites.filter((blockedSite) =>
+        blockedSite.domain.toLowerCase().startsWith(searchValue)
+      ),
+    }
   }, [])
-  const { data, error, fetchData, loading } = useQuery(queryBlockSites)
+
+  const {
+    data: schema,
+    error,
+    fetchData,
+    loading,
+  } = useQuery(fetchBlockSitesSchema)
 
   useEffect(() => {
     fetchData(undefined)
@@ -39,9 +49,10 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
   return (
     <BlockedSitesContext.Provider
       value={{
-        blockedSites: data?.slice().reverse() ?? [],
+        blockedSites: schema?.blockedSites.slice().reverse() ?? [],
+        enabledBlocking: schema?.enableBlocking ?? true,
         error,
-        refetchBlockedSites: fetchData,
+        refetchSchema: fetchData,
         loading,
       }}
     >
