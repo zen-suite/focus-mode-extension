@@ -5,7 +5,7 @@ class StorageInstance<T extends { [key: string]: any }> {
     private readonly initialData?: T
   ) {}
 
-  async set(data: T) {
+  async set(data: T | undefined) {
     await this.storageArea.set({
       [this.tableName]: {
         ...this.initialData,
@@ -16,11 +16,15 @@ class StorageInstance<T extends { [key: string]: any }> {
 
   async update<K extends keyof T>(key: K, data: T[K]) {
     const existingData = await this.get()
-    existingData[key] = data
-    await this.set(existingData)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const updatedData = {
+      ...existingData,
+      [key]: data,
+    } as T
+    await this.set(updatedData)
   }
 
-  async get(): Promise<T> {
+  async get(): Promise<T | undefined> {
     const allData = await this.storageArea.get()
     return allData[this.tableName]
   }

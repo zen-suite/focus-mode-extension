@@ -1,7 +1,10 @@
 import { Button, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
-import { addBlockedSite, type IBlockedSite } from '../domain/block-site'
+import {
+  getBlockSiteStorage,
+  type IBlockedSite
+} from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import { getHostDomain, getHostUrl, isHttpProtocol } from '../util/host'
 
@@ -44,7 +47,7 @@ export default function AppContentContainer() {
     if (!currentDomain) {
       return
     }
-    await addBlockedSite(currentDomain)
+    await getBlockSiteStorage().addBlockSite(currentDomain)
     await refetchBlockedSites()
   }
 

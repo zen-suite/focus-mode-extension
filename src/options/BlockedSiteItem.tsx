@@ -1,6 +1,9 @@
 import { Delete } from '@mui/icons-material'
 import { IconButton, ListItem, ListItemText } from '@mui/material'
-import { removeBlockedSite, type IBlockedSite } from '../domain/block-site'
+import {
+  getBlockSiteStorage,
+  type IBlockedSite
+} from '../domain/block-site'
 
 interface IProps {
   blockedSite: IBlockedSite
@@ -15,7 +18,7 @@ export default function (props: IProps): JSX.Element {
   const onBlockedSiteDeleted = async (
     blockedSite: IBlockedSite
   ): Promise<void> => {
-    await removeBlockedSite(blockedSite.domain)
+    await getBlockSiteStorage().removeBlockedSite(blockedSite.domain)
     props.onBlockedSiteDeleted(blockedSite)
   }
 

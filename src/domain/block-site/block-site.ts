@@ -1,3 +1,5 @@
+import { sortBy } from 'lodash'
+
 export interface IBlockedSite {
   id: number
   domain: string
@@ -34,7 +36,9 @@ export async function getNextBlockedSiteIndex(): Promise<number> {
   if (!blockedSites.length) {
     return 1
   }
-  const lastBlockedSite = blockedSites[blockedSites.length - 1]
+  const lastBlockedSite = sortBy(blockedSites, (site) => site.id)[
+    blockedSites.length - 1
+  ]
   return lastBlockedSite.id + 1
 }
 

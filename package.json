@@ -25,6 +25,7 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "is-valid-domain": "^0.1.6",
+    "lodash": "^4.17.21",
     "loglevel": "^1.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -35,6 +36,7 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^10.0.3",
     "@types/chrome": "^0.0.219",
+    "@types/lodash": "^4.14.195",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

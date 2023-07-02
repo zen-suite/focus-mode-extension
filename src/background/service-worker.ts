@@ -1,8 +1,4 @@
-import { syncBlockSites } from '../domain/block-site'
-import { isStorageAllowed } from '../storage'
+import { getBlockSiteStorage } from '../domain/block-site'
 chrome.runtime.onInstalled.addListener(async () => {
-  const storageGranted = await isStorageAllowed()
-  if (storageGranted) {
-    await syncBlockSites()
-  }
+  await getBlockSiteStorage().syncBlockedSites()
 })

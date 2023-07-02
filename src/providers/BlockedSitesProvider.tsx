@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect } from 'react'
 import {
-  getBlockedSites,
+  getBlockSiteStorage,
   searchBlockSites,
-  type IBlockedSite,
+  type IBlockedSite
 } from '../domain/block-site'
 import { useQuery } from '../hooks/useQuery'
 
@@ -26,7 +26,7 @@ export const BlockedSitesContext =
 export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
   const queryBlockSites = useCallback(async (searchValue?: string) => {
     if (!searchValue?.trim()) {
-      return await getBlockedSites()
+      return await getBlockSiteStorage().getBlockedSites()
     }
     return await searchBlockSites(searchValue)
   }, [])

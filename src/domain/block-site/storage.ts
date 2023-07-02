@@ -1,6 +1,12 @@
-import { getStorageInstance, requestStoragePermission } from '../../storage'
-import { getBlockedSites, type IBlockedSite } from './block-site'
-import { NotEnoughPermissionError } from './errors'
+import { differenceBy, uniqBy } from 'lodash'
+import { getStorageInstance } from '../../storage'
+import {
+  addBlockedSite,
+  getBlockedSites,
+  removeBlockedSite,
+  type IBlockedSite,
+  findBlockedSiteByDomain,
+} from './block-site'
 
 export const BLOCKED_SITE_TABLE_NAME = 'BLOCKED_SITES'
 
@@ -14,20 +20,106 @@ export const initialBlockedSiteSchema: IBlockedSiteSchema = {
   blockedSites: [],
 }
 
-export async function syncBlockSites() {
-  const storageAllowed = await requestStoragePermission()
-  console.log("🚀 ~ file: storage.ts:19 ~ syncBlockSites ~ storageAllowed:", storageAllowed)
-  if (!storageAllowed) {
-    throw new NotEnoughPermissionError('storage')
-  }
-  const allBlockedSites = await getBlockedSites()
-  const storageArea = getBlockedSiteStorageInstance()
-  await storageArea.set({
-    ...initialBlockedSiteSchema,
-    blockedSites: allBlockedSites,
-  })
+function getUniqueSites(blockedSites: IBlockedSite[]): IBlockedSite[] {
+  return uniqBy(blockedSites, (site) => site.domain)
 }
 
-export function getBlockedSiteStorageInstance() {
+function getBlockedSiteStorageInstance() {
   return getStorageInstance(BLOCKED_SITE_TABLE_NAME, initialBlockedSiteSchema)
+}
+
+export class BlockSiteStorage {
+  constructor(
+    private readonly storageInstance: ReturnType<
+      typeof getBlockedSiteStorageInstance
+    >
+  ) {}
+
+  async enableSitesBlock() {
+    await this.syncBlockedSites()
+  }
+
+  async disableSitesBlock() {
+    const schema = await this.storageInstance.get()
+    const blockedSites = await getBlockedSites()
+    const uniqueSites = getUniqueSites([
+      ...(schema?.blockedSites ?? []),
+      ...blockedSites,
+    ])
+    await Promise.all(
+      uniqueSites.map(async (site) => {
+        await removeBlockedSite(site.domain)
+      })
+    )
+  }
+
+  async toggleSitesBlock(enable: boolean) {
+    await this.storageInstance.update('enableBlocking', enable)
+  }
+
+  async getEnableBlocking(): Promise<boolean> {
+    const schema = await this.storageInstance.get()
+    return schema?.enableBlocking ?? true
+  }
+
+  async addBlockSite(site: string) {
+    const blockedSite = await findBlockedSiteByDomain(site)
+    if (!blockedSite) {
+      return
+    }
+    const schema = await this.storageInstance.get()
+    await this.storageInstance.update('blockedSites', [
+      ...(schema?.blockedSites ?? []),
+      blockedSite,
+    ])
+    if (schema?.enableBlocking === undefined || schema.enableBlocking) {
+      await addBlockedSite(site)
+    }
+  }
+
+  async getBlockedSites(): Promise<IBlockedSite[]> {
+    const schema = await this.storageInstance.get()
+    return schema?.blockedSites ?? []
+  }
+
+  async removeBlockedSite(domain: string) {
+    await removeBlockedSite(domain)
+    const schema = await this.storageInstance.get()
+    const blockedSites = schema?.blockedSites.filter(
+      (site) => site.domain !== domain
+    )
+    await this.storageInstance.update('blockedSites', blockedSites ?? [])
+  }
+
+  async syncBlockedSites() {
+    const allBlockedSites = await getBlockedSites()
+    const storedBlockedSite = await this.storageInstance.get()
+    const finalBlockedSites = getUniqueSites([
+      ...allBlockedSites,
+      ...(storedBlockedSite?.blockedSites ?? []),
+    ])
+
+    await this.storageInstance.update('blockedSites', finalBlockedSites)
+
+    const blockedSitesToAdd = differenceBy(
+      finalBlockedSites,
+      allBlockedSites,
+      (site) => site.domain
+    )
+
+    await Promise.all(
+      blockedSitesToAdd.map(async (blockedSite) => {
+        await addBlockedSite(blockedSite.domain)
+      })
+    )
+  }
+}
+
+let blockSiteStorage: BlockSiteStorage
+
+export function getBlockSiteStorage() {
+  if (!blockSiteStorage) {
+    blockSiteStorage = new BlockSiteStorage(getBlockedSiteStorageInstance())
+  }
+  return blockSiteStorage
 }

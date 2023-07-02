@@ -1,13 +1,31 @@
 import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
-import { getBlockedSiteStorageInstance } from '../domain/block-site'
-import { requestStoragePermission } from '../storage'
+import { useEffect, useState } from 'react'
+import { getBlockSiteStorage } from '../domain/block-site'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
 
+const blockedSiteStorage = getBlockSiteStorage()
+
 export default function BlockedSitesSection() {
+  const [blockingEnabled, setBlockingEnabled] = useState<boolean>(true)
+
+  useEffect(() => {
+    async function loadEnableBlocking() {
+      const enableBlocking = await blockedSiteStorage.getEnableBlocking()
+      setBlockingEnabled(enableBlocking ?? true)
+    }
+    loadEnableBlocking()
+  }, [])
+
   async function onSiteBlockingToggle(checked: boolean) {
-    await requestStoragePermission()
-    await getBlockedSiteStorageInstance().update('enableBlocking', checked)
+    await blockedSiteStorage.toggleSitesBlock(checked)
+    setBlockingEnabled(checked)
+
+    if (checked) {
+      await blockedSiteStorage.enableSitesBlock()
+    } else {
+      await blockedSiteStorage.disableSitesBlock()
+    }
   }
 
   return (
@@ -17,7 +35,7 @@ export default function BlockedSitesSection() {
         <FormControlLabel
           control={
             <Switch
-              defaultChecked
+              checked={blockingEnabled}
               onChange={async (_event, checked) => {
                 await onSiteBlockingToggle(checked)
               }}
