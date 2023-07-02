@@ -1,9 +1,6 @@
 import { Delete } from '@mui/icons-material'
 import { IconButton, ListItem, ListItemText } from '@mui/material'
-import {
-  getBlockSiteStorage,
-  type IBlockedSite
-} from '../domain/block-site'
+import { getBlockSiteStorage, type IBlockedSite } from '../domain/block-site'
 
 interface IProps {
   blockedSite: IBlockedSite
