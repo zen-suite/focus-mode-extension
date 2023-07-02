@@ -1,6 +1,7 @@
 import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { getBlockSiteStorage } from '../domain/block-site'
+import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
 
@@ -8,6 +9,7 @@ const blockedSiteStorage = getBlockSiteStorage()
 
 export default function () {
   const [enableBlocking, setEnableBlocking] = useState<boolean>(true)
+  const { refetchSchema } = useBlockedSites()
 
   useEffect(() => {
     async function loadEnableBlocking() {
@@ -26,6 +28,7 @@ export default function () {
     } else {
       await blockedSiteStorage.disableSitesBlock()
     }
+    await refetchSchema()
   }
 
   return (
