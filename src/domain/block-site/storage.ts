@@ -6,6 +6,7 @@ import {
   removeBlockedSite,
   type IBlockedSite,
   findBlockedSiteByDomain,
+  batchAddBlockedSites,
 } from './block-site'
 
 export const BLOCKED_SITE_TABLE_NAME = 'BLOCKED_SITES'
@@ -97,26 +98,21 @@ export class BlockSiteStorage {
   }
 
   async syncBlockedSites() {
-    const allBlockedSites = await getBlockedSites()
+    const existingBlockedSites = await getBlockedSites()
     const storedBlockedSite = await this.storageInstance.get()
     const finalBlockedSites = getUniqueSites([
-      ...allBlockedSites,
+      ...existingBlockedSites,
       ...(storedBlockedSite?.blockedSites ?? []),
     ])
 
-    await this.storageInstance.update('blockedSites', finalBlockedSites)
-
     const blockedSitesToAdd = differenceBy(
       finalBlockedSites,
-      allBlockedSites,
+      existingBlockedSites,
       (site) => site.domain
     )
 
-    await Promise.all(
-      blockedSitesToAdd.map(async (blockedSite) => {
-        await addBlockedSite(blockedSite.domain)
-      })
-    )
+    await batchAddBlockedSites(blockedSitesToAdd.map((site) => site.domain))
+    await this.storageInstance.update('blockedSites', await getBlockedSites())
   }
 }
 

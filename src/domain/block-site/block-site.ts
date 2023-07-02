@@ -8,26 +8,48 @@ export interface IBlockedSite {
 
 export const redirectExtensionPath = '/src/blocked/index.html'
 
+function getBlockChromeRule(
+  id: number,
+  domain: string
+): chrome.declarativeNetRequest.Rule {
+  return {
+    id,
+    action: {
+      type: chrome.declarativeNetRequest.RuleActionType.REDIRECT,
+      redirect: {
+        extensionPath: redirectExtensionPath,
+      },
+    },
+    condition: {
+      urlFilter: `||${domain}`,
+      resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
+    },
+  }
+}
+
 export async function addBlockedSite(domain: string): Promise<void> {
   const existingBlockedSite = await findBlockedSiteByDomain(domain)
   const blockedSiteId = await getNextBlockedSiteIndex()
   await chrome.declarativeNetRequest.updateDynamicRules({
-    addRules: [
-      {
-        id: blockedSiteId,
-        action: {
-          type: chrome.declarativeNetRequest.RuleActionType.REDIRECT,
-          redirect: {
-            extensionPath: redirectExtensionPath,
-          },
-        },
-        condition: {
-          urlFilter: `||${domain}`,
-          resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
-        },
-      },
-    ],
+    addRules: [getBlockChromeRule(blockedSiteId, domain)],
     removeRuleIds: existingBlockedSite ? [existingBlockedSite.id] : [],
+  })
+}
+
+export async function batchAddBlockedSites(domains: string[]) {
+  const allBlockedSites = await getBlockedSites()
+  const existingSites = allBlockedSites.filter((blockedSite) =>
+    domains.includes(blockedSite.domain)
+  )
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    addRules: [],
+    removeRuleIds: existingSites.map((site) => site.id),
+  })
+  const nextBlockedSiteId = await getNextBlockedSiteIndex()
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    addRules: domains.map((domain, index) => {
+      return getBlockChromeRule(nextBlockedSiteId + index, domain)
+    }),
   })
 }
 
