@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BlockedSitesProvider } from '../providers/BlockedSitesProvider'
 import BlockedSitesSection from './BlockedSitesSection'
 import styles from './Options.module.css'
