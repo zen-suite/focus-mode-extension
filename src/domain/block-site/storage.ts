@@ -63,6 +63,7 @@ export class BlockSiteStorage {
   }
 
   async addBlockSite(site: string) {
+    await addBlockedSite(site)
     const blockedSite = await findBlockedSiteByDomain(site)
     if (!blockedSite) {
       return
@@ -72,8 +73,8 @@ export class BlockSiteStorage {
       ...(schema?.blockedSites ?? []),
       blockedSite,
     ])
-    if (schema?.enableBlocking === undefined || schema.enableBlocking) {
-      await addBlockedSite(site)
+    if (schema?.enableBlocking !== undefined && !schema.enableBlocking) {
+      await this.disableSitesBlock()
     }
   }
 
