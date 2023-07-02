@@ -36,7 +36,7 @@ function useIsDomainValid() {
 }
 
 export default function AppContentContainer() {
-  const { blockedSites, refetchBlockedSites } = useBlockedSites()
+  const { blockedSites, refetchSchema: refetchBlockedSites } = useBlockedSites()
   const [currentDomain, setCurrentDomain] = useState<string | undefined>()
 
   useEffect(() => {

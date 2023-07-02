@@ -21,7 +21,7 @@ interface IInnerProps {
 }
 
 export default () => {
-  const { refetchBlockedSites, blockedSites } = useBlockedSites()
+  const { refetchSchema: refetchBlockedSites, blockedSites } = useBlockedSites()
   return (
     <AddOrSearchBlockedSite
       onFetchSites={refetchBlockedSites}

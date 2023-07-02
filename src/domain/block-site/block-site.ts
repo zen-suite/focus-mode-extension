@@ -79,12 +79,3 @@ export function transformChromeRuleToIBlockedSite(
     actionType: rule.action.type,
   }
 }
-
-export async function searchBlockSites(searchValue: string) {
-  const blockedSites = await getBlockedSites()
-  return blockedSites.filter((blockedSite) => {
-    return blockedSite.domain
-      .toLowerCase()
-      .startsWith(searchValue.toLowerCase())
-  })
-}

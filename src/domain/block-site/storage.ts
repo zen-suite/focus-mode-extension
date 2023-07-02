@@ -83,6 +83,10 @@ export class BlockSiteStorage {
     return schema?.blockedSites ?? []
   }
 
+  async get(): Promise<IBlockedSiteSchema> {
+    return (await this.storageInstance.get()) ?? initialBlockedSiteSchema
+  }
+
   async removeBlockedSite(domain: string) {
     await removeBlockedSite(domain)
     const schema = await this.storageInstance.get()

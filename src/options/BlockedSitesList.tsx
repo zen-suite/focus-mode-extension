@@ -13,7 +13,7 @@ export default function () {
   const queries = useBlockedSites()
 
   return (
-    <BlockedSitesList {...queries} refetchData={queries.refetchBlockedSites} />
+    <BlockedSitesList {...queries} refetchData={queries.refetchSchema} />
   )
 }
 
