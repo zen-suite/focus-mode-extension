@@ -6,20 +6,20 @@ import BlockedSitesList from './BlockedSitesList'
 
 const blockedSiteStorage = getBlockSiteStorage()
 
-export default function BlockedSitesSection() {
-  const [blockingEnabled, setBlockingEnabled] = useState<boolean>(true)
+export default function () {
+  const [enableBlocking, setEnableBlocking] = useState<boolean>(true)
 
   useEffect(() => {
     async function loadEnableBlocking() {
       const enableBlocking = await blockedSiteStorage.getEnableBlocking()
-      setBlockingEnabled(enableBlocking ?? true)
+      setEnableBlocking(enableBlocking ?? true)
     }
     loadEnableBlocking()
   }, [])
 
   async function onSiteBlockingToggle(checked: boolean) {
     await blockedSiteStorage.toggleSitesBlock(checked)
-    setBlockingEnabled(checked)
+    setEnableBlocking(checked)
 
     if (checked) {
       await blockedSiteStorage.enableSitesBlock()
@@ -29,15 +29,27 @@ export default function BlockedSitesSection() {
   }
 
   return (
+    <BlockedSitesSection
+      enableBlocking={enableBlocking}
+      toggleSitesBlocking={onSiteBlockingToggle}
+    />
+  )
+}
+
+export function BlockedSitesSection(props: {
+  enableBlocking: boolean
+  toggleSitesBlocking: (enable: boolean) => Promise<void>
+}) {
+  return (
     <>
       <Box display="flex">
         <AddOrSearchBlockedSite />
         <FormControlLabel
           control={
             <Switch
-              checked={blockingEnabled}
+              checked={props.enableBlocking}
               onChange={async (_event, checked) => {
-                await onSiteBlockingToggle(checked)
+                await props.toggleSitesBlocking(checked)
               }}
             />
           }
