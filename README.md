@@ -53,11 +53,13 @@ After running dev server, you can install `dist` directory as chrome extension u
 ## Testing
 
 - Running test watch command
+
 ```bash
 $ yarn test:watch
 ```
 
 - Running test command
+
 ```bash
 $ yarn test
 ```
