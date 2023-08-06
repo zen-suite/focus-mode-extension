@@ -26,5 +26,7 @@ jobs:
         run: yarn run lint
       - name: Run Format check
         run: yarn run fmt:check
+      - name: Run test
+        run: yarn run test
       - name: Run build
         run: yarn run build

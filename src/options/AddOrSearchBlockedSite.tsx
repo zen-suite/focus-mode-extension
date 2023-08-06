@@ -18,6 +18,7 @@ import {
 interface IInnerProps {
   allowCreation: boolean
   onFetchSites: (value?: string) => void
+  onAddBlockSite: (url: string) => Promise<void>
 }
 
 export default () => {
@@ -26,6 +27,9 @@ export default () => {
     <AddOrSearchBlockedSite
       onFetchSites={refetchBlockedSites}
       allowCreation={blockedSites.length === 0}
+      onAddBlockSite={async (url) => {
+        await getBlockSiteStorage().addBlockSite(url)
+      }}
     />
   )
 }
@@ -33,6 +37,7 @@ export default () => {
 export function AddOrSearchBlockedSite({
   onFetchSites,
   allowCreation,
+  onAddBlockSite,
 }: IInnerProps) {
   const [value, setValue] = useState('')
   const debouncedValue = useDebounce(value, 100)
@@ -55,9 +60,7 @@ export function AddOrSearchBlockedSite({
         if (!isValueValid) {
           return
         }
-        await getBlockSiteStorage().addBlockSite(
-          extractDomain(normalizeHttpUrl(value))
-        )
+        await onAddBlockSite(extractDomain(normalizeHttpUrl(value)))
         onFetchSites(value)
         setValue('')
       }
@@ -66,7 +69,7 @@ export function AddOrSearchBlockedSite({
       }
       addSite()
     },
-    [canAddSite, isValueValid, onFetchSites, value]
+    [canAddSite, isValueValid, onAddBlockSite, onFetchSites, value]
   )
 
   const helperTextForAdding = useMemo(() => {
