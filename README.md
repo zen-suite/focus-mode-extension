@@ -8,6 +8,12 @@ Focus mode chrome extension that you can block websites up to 5000 domains([dete
 
 [![Release Extension](https://github.com/zen-suite/focus-mode-extension/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/zen-suite/focus-mode-extension/actions/workflows/release.yaml)
 
+## Features
+
+1. Add a website to block
+2. Search blocked websites
+3. Disable blocking websites without losing added websites.
+
 ## Download and Install
 
 Download at [chrome web store](https://chrome.google.com/webstore/detail/zen-mode-block-distractio/cblailchdcmjcjjklmninjaoifijfdmg). Note: Version published at chrome web store might not be latest as I have to manually publish every version.
