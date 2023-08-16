@@ -2,11 +2,11 @@ import { differenceBy, uniqBy } from 'lodash'
 import { getStorageInstance } from '../../storage'
 import {
   addBlockedSite,
+  batchAddBlockedSites,
+  findBlockedSiteByDomain,
   getBlockedSites,
   removeBlockedSite,
   type IBlockedSite,
-  findBlockedSiteByDomain,
-  batchAddBlockedSites,
 } from './block-site'
 
 export const BLOCKED_SITE_TABLE_NAME = 'BLOCKED_SITES'
@@ -14,6 +14,7 @@ export const BLOCKED_SITE_TABLE_NAME = 'BLOCKED_SITES'
 export interface IBlockedSiteSchema {
   enableBlocking: boolean
   blockedSites: IBlockedSite[]
+  breakUntil?: string
 }
 
 export const initialBlockedSiteSchema: IBlockedSiteSchema = {
@@ -36,11 +37,11 @@ export class BlockSiteStorage {
     >
   ) {}
 
-  async enableSitesBlock() {
+  private async enableSitesBlock() {
     await this.syncBlockedSites()
   }
 
-  async disableSitesBlock() {
+  private async disableSitesBlock() {
     const schema = await this.storageInstance.get()
     const blockedSites = await getBlockedSites()
     const uniqueSites = getUniqueSites([
@@ -56,6 +57,11 @@ export class BlockSiteStorage {
 
   async toggleSitesBlock(enable: boolean) {
     await this.storageInstance.update('enableBlocking', enable)
+    if (enable) {
+      await this.enableSitesBlock()
+    } else {
+      await this.disableSitesBlock()
+    }
   }
 
   async getEnableBlocking(): Promise<boolean> {
@@ -75,8 +81,13 @@ export class BlockSiteStorage {
       blockedSite,
     ])
     if (schema?.enableBlocking !== undefined && !schema.enableBlocking) {
-      await this.disableSitesBlock()
+      await this.toggleSitesBlock(false)
     }
+  }
+
+  async setBreakTime(breakTime: Date) {
+    await this.storageInstance.update('breakUntil', breakTime.toISOString())
+    await this.toggleSitesBlock(false)
   }
 
   async getBlockedSites(): Promise<IBlockedSite[]> {

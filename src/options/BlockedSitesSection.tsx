@@ -22,12 +22,6 @@ export default function () {
   async function onSiteBlockingToggle(checked: boolean) {
     await blockedSiteStorage.toggleSitesBlock(checked)
     setEnableBlocking(checked)
-
-    if (checked) {
-      await blockedSiteStorage.enableSitesBlock()
-    } else {
-      await blockedSiteStorage.disableSitesBlock()
-    }
     await refetchSchema()
   }
 

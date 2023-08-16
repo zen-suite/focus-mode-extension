@@ -1,8 +1,11 @@
 import { Box, Typography } from '@mui/material'
-import { TakeABreakItem } from './TakeABreakItem'
 import { useSnackbar } from 'notistack'
+import { getBlockSiteStorage } from '../../domain/block-site'
+import { HOUR_FORMAT } from '../../util/date'
+import { TakeABreakItem } from './TakeABreakItem'
 
 export default function TakeABreakSection() {
+  const storage = getBlockSiteStorage()
   const { enqueueSnackbar } = useSnackbar()
   return (
     <Box
@@ -23,8 +26,11 @@ export default function TakeABreakSection() {
       </Typography>
       <TakeABreakItem
         onSetBreakTime={(breakTime) => {
+          storage.setBreakTime(breakTime.toDate())
           enqueueSnackbar(
-            `Website blocking will disable until ${breakTime.format('hh:mm A')}`,
+            `Website blocking will disable until ${breakTime.format(
+              HOUR_FORMAT
+            )}`,
             { variant: 'success' }
           )
         }}
