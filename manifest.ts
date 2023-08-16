@@ -30,6 +30,9 @@ export const manifest: ManifestV3Export = {
     'tabs',
     'unlimitedStorage',
     'storage',
+    // This permission for running task periodically.
+    // Used in feature: Take a break
+    'alarms',
   ],
   // Host permissions for all urls is needed because websites to block are determined by users.
   // Thus extension does not know which urls to block in advance

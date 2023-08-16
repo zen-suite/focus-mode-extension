@@ -99,6 +99,13 @@ export class BlockSiteStorage {
     return (await this.storageInstance.get()) ?? initialBlockedSiteSchema
   }
 
+  async update<K extends keyof IBlockedSiteSchema>(
+    field: K,
+    data: IBlockedSiteSchema[K]
+  ) {
+    await this.storageInstance.update(field, data)
+  }
+
   async removeBlockedSite(domain: string) {
     await removeBlockedSite(domain)
     const schema = await this.storageInstance.get()

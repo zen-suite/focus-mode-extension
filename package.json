@@ -42,7 +42,7 @@
     "@semantic-release/npm": "^10.0.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
-    "@types/chrome": "^0.0.219",
+    "@types/chrome": "^0.0.243",
     "@types/jest": "^29.5.3",
     "@types/lodash": "^4.14.195",
     "@types/node": "^18.15.11",
