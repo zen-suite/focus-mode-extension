@@ -45,8 +45,7 @@ export function BlockedSitesSection(props: {
 }) {
   return (
     <>
-      <Box display="flex">
-        <AddOrSearchBlockedSite />
+      <Box py={2}>
         <FormControlLabel
           control={
             <Switch
@@ -56,18 +55,20 @@ export function BlockedSitesSection(props: {
               }}
             />
           }
-          label={
-            <Typography variant="caption">Enable site blocking</Typography>
-          }
+          label={<Typography>Enable site blocking</Typography>}
         />
       </Box>
-      <Box
-        style={{
-          border: '0.5px solid gray',
-          borderRadius: '10px',
-        }}
-      >
-        <BlockedSitesList />
+      <Box>
+        <AddOrSearchBlockedSite />
+
+        <Box
+          style={{
+            border: '0.5px solid gray',
+            borderRadius: '10px',
+          }}
+        >
+          <BlockedSitesList />
+        </Box>
       </Box>
     </>
   )
