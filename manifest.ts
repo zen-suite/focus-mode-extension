@@ -34,6 +34,12 @@ export const manifest: ManifestV3Export = {
     // Used in feature: Take a break
     'alarms',
   ],
+  content_scripts: [
+    {
+      js: ['src/content/main.tsx'],
+      matches: ['https://*/*', 'http://*/*'],
+    },
+  ],
   // Host permissions for all urls is needed because websites to block are determined by users.
   // Thus extension does not know which urls to block in advance
   host_permissions: ['<all_urls>'],
