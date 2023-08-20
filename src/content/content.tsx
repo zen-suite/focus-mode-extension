@@ -1,3 +1,9 @@
+import TakeABreakReminder from './take-a-break/TakeABreakContainer'
+
 export default function Content() {
-    return <div>Hello from zen-mode content</div>
+  return (
+    <div>
+      <TakeABreakReminder />
+    </div>
+  )
 }
