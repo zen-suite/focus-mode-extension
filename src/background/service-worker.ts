@@ -34,7 +34,7 @@ async function breakOver() {
     await storage.update('breakUntil', undefined)
   }
 
-  if (breakTimeDayJS.diff(dayjs(), 'minute') <= 2) {
+  if (breakTimeDayJS.diff(dayjs(), 'minute') <= 1) {
     const tabs = await chrome.tabs.query({
       currentWindow: true,
     })

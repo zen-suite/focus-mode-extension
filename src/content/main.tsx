@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { getBlockSiteStorage } from '../domain/block-site'
+import AppThemeProvider from '../providers/AppThemeProvider'
 import { extractDomain } from '../util/host'
 import Content from './Content'
 ;(async () => {
@@ -22,7 +23,9 @@ import Content from './Content'
 
   ReactDOM.render(
     <React.StrictMode>
-      <Content />
+      <AppThemeProvider>
+        <Content />
+      </AppThemeProvider>
     </React.StrictMode>,
     contentRoot
   )
