@@ -4,13 +4,13 @@ import { type IBreakTimeMessage } from '../../domain/take-a-break'
 import TakeABreakPopup from './TakeABreakPopup'
 
 export default function TakeABreakReminder() {
-  const [breakUntil, setBreakUntil] = useState<Date | undefined>(undefined)
+  const [breakUntil, setBreakUntil] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     const onMessageReceived = createMessageHandler(
       (message: IBreakTimeMessage) => {
         if (message.data.breakUntil) {
-          setBreakUntil(new Date(message.data.breakUntil))
+          setBreakUntil(message.data.breakUntil)
         }
       }
     )

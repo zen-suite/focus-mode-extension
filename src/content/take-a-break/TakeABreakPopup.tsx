@@ -1,19 +1,21 @@
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
-export default function TakeABreakPopup(props: { breakUntil: Date }) {
-  const [countdown, setCountdown] = useState<number>(() =>
-    dayjs(props.breakUntil).diff(dayjs(), 'second')
-  )
+export default function TakeABreakPopup(props: { breakUntil: string }) {
+  const [countdown, setCountdown] = useState<number>(0)
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const intervalId = setInterval(() => {
       setCountdown(dayjs(props.breakUntil).diff(dayjs(), 'second'))
     }, 1000)
     return () => {
-      clearTimeout(timeoutId)
+      clearInterval(intervalId)
     }
   }, [props.breakUntil])
 
-  return <div>Break is almost up: ${countdown} seconds</div>
+  if (countdown < 0) {
+    return <Fragment />
+  }
+
+  return <div>Break is almost up: {countdown} seconds</div>
 }
