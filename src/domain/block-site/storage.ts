@@ -3,7 +3,7 @@ import { getStorageInstance } from '../../storage'
 import {
   addBlockedSite,
   batchAddBlockedSites,
-  findBlockedSiteByDomain,
+  filterBlockedSitesByDomain,
   getBlockedSites,
   removeBlockedSite,
   type IBlockedSite,
@@ -71,15 +71,12 @@ export class BlockSiteStorage {
 
   async addBlockSite(site: string) {
     await addBlockedSite(site)
-    const blockedSite = await findBlockedSiteByDomain(site)
-    if (!blockedSite) {
-      return
-    }
+    const blockedSites = await filterBlockedSitesByDomain(site)
     const schema = await this.storageInstance.get()
-    await this.storageInstance.update('blockedSites', [
-      ...(schema?.blockedSites ?? []),
-      blockedSite,
-    ])
+    await this.storageInstance.update(
+      'blockedSites',
+      getUniqueSites([...(schema?.blockedSites ?? []), ...blockedSites])
+    )
     if (schema?.enableBlocking !== undefined && !schema.enableBlocking) {
       await this.toggleSitesBlock(false)
     }

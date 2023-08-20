@@ -4,7 +4,7 @@ import {
   TAKE_A_BREAK_ALARM_NAME,
 } from '../domain/block-site'
 import { IBreakTimeMessage } from '../domain/take-a-break'
-import { MessageType } from '../domain/types'
+import { MessageType } from '../util/messages'
 chrome.runtime.onInstalled.addListener(async () => {
   await getBlockSiteStorage().syncBlockedSites()
 
