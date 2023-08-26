@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/react'
+import React from 'react'
+import AppThemeProvider from '../src/providers/AppThemeProvider'
 
 const preview: Preview = {
   parameters: {
@@ -10,6 +12,15 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story) => {
+      return (
+        <AppThemeProvider>
+          <Story />
+        </AppThemeProvider>
+      )
+    },
+  ],
 }
 
 export default preview
