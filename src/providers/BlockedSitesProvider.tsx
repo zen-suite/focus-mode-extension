@@ -43,7 +43,7 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
   } = useQuery(fetchBlockSitesSchema)
 
   useEffect(() => {
-    fetchData(undefined)
+    fetchData()
   }, [fetchData])
 
   return (

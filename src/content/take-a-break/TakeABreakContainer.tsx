@@ -1,6 +1,11 @@
 import { Fragment, useEffect, useState } from 'react'
-import { createMessageHandler } from '../../util/messages'
 import { type IBreakTimeMessage } from '../../domain/take-a-break'
+import {
+  MessageType,
+  createMessageHandler,
+  sendMessage,
+  type IAddMoreBreakTime,
+} from '../../util/messages'
 import TakeABreakPopup from './TakeABreakPopup'
 
 export default function TakeABreakReminder() {
@@ -20,13 +25,22 @@ export default function TakeABreakReminder() {
     }
   }, [])
 
+  const onAddMoreTime: React.ComponentProps<
+    typeof TakeABreakPopup
+  >['onAddMoreTime'] = async ({ num, unit }) => {
+    await sendMessage<IAddMoreBreakTime>({
+      data: { num, unit },
+      topic: MessageType.ADD_MORE_BREAK_TIME,
+    })
+  }
+
   if (!breakUntil) {
     return <Fragment />
   }
 
   return (
     <div>
-      <TakeABreakPopup breakUntil={breakUntil} />
+      <TakeABreakPopup breakUntil={breakUntil} onAddMoreTime={onAddMoreTime} />
     </div>
   )
 }

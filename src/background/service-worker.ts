@@ -4,7 +4,7 @@ import {
   TAKE_A_BREAK_ALARM_NAME,
 } from '../domain/block-site'
 import { IBreakTimeMessage } from '../domain/take-a-break'
-import { MessageType } from '../util/messages'
+import { Message, MessageType } from '../util/messages'
 chrome.runtime.onInstalled.addListener(async () => {
   await getBlockSiteStorage().syncBlockedSites()
 
@@ -19,6 +19,13 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === TAKE_A_BREAK_ALARM_NAME) {
     await breakOver()
+  }
+})
+
+chrome.runtime.onMessage.addListener((message: Message) => {
+  switch (message.topic) {
+    case MessageType.ADD_MORE_BREAK_TIME:
+      return addMoreBreakTime(message.data)
   }
 })
 
@@ -53,4 +60,22 @@ async function breakOver() {
       })
     )
   }
+}
+
+async function addMoreBreakTime({
+  num,
+  unit,
+}: {
+  num: number
+  unit: dayjs.ManipulateType
+}) {
+  const storage = getBlockSiteStorage()
+  const blockedSiteSchema = await storage.get()
+  if (!blockedSiteSchema.breakUntil) {
+    return
+  }
+  await storage.setBreakTime(
+    dayjs(blockedSiteSchema.breakUntil).add(num, unit).toDate()
+  )
+  return { success: true }
 }

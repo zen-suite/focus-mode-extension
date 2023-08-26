@@ -8,8 +8,13 @@ const meta: Meta<typeof TakeABreakPopup> = {
 type Story = StoryObj<typeof TakeABreakPopup>
 
 export const Default: Story = {
-  render: () => {
-    return <TakeABreakPopup breakUntil={new Date().toISOString()} />
+  args: {
+    breakUntil: new Date().toISOString(),
+  },
+  argTypes: {
+    onAddMoreTime: {
+      action: 'added more time',
+    },
   },
 }
 

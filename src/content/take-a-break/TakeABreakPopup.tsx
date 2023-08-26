@@ -3,7 +3,13 @@ import dayjs from 'dayjs'
 import { Fragment, useEffect, useState } from 'react'
 import TakeABreakCountdown from './TakeABreakCountdown'
 
-export default function TakeABreakPopup(props: { breakUntil: string }) {
+export default function TakeABreakPopup(props: {
+  breakUntil: string
+  onAddMoreTime: (payload: {
+    num: number
+    unit: 'minute' | 'second'
+  }) => void | Promise<void>
+}) {
   const [countdown, setCountdown] = useState<number>(0)
   const [isDismissed, setIsDismissed] = useState(false)
 
@@ -25,6 +31,11 @@ export default function TakeABreakPopup(props: { breakUntil: string }) {
     return <Fragment />
   }
 
+  async function onAddMoreTime() {
+    await props.onAddMoreTime({ num: 5, unit: 'minute' })
+    setIsDismissed(true)
+  }
+
   return (
     <Card
       sx={{
@@ -38,7 +49,7 @@ export default function TakeABreakPopup(props: { breakUntil: string }) {
       <CardContent>
         <TakeABreakCountdown countdown={countdown} />
         <CardActions>
-          <Button>+5 more min</Button>
+          <Button onClick={onAddMoreTime}>+5 more min</Button>
           <Button
             variant="contained"
             onClick={() => {
