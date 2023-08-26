@@ -18,7 +18,9 @@
     "test": "vitest run",
     "release": "semantic-release",
     "release:build": "yarn build && zip -r dist.zip dist",
-    "postversion": "yarn release:build"
+    "postversion": "yarn release:build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -27,6 +29,7 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
     "@mui/x-date-pickers": "^6.11.1",
+    "csstype": "^3.0.10",
     "dayjs": "^1.11.9",
     "is-valid-domain": "^0.1.6",
     "lodash": "^4.17.21",
@@ -40,6 +43,15 @@
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^10.0.3",
+    "@storybook/addon-essentials": "^7.3.2",
+    "@storybook/addon-interactions": "^7.3.2",
+    "@storybook/addon-links": "^7.3.2",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.3.2",
+    "@storybook/builder-vite": "^7.3.2",
+    "@storybook/react": "^7.3.2",
+    "@storybook/react-vite": "^7.3.2",
+    "@storybook/testing-library": "^0.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@types/chrome": "^0.0.243",
@@ -58,12 +70,14 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.13",
     "jsdom": "^22.1.0",
     "prettier": "^2.8.7",
     "semantic-release": "^21.0.1",
+    "storybook": "^7.3.2",
     "ts-node": "^10.9.1",
-    "typescript": "*",
-    "vite": "^4.4.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
     "vitest": "^0.34.0"
   }
 }
