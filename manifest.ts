@@ -30,8 +30,7 @@ export const manifest: ManifestV3Export = {
     'tabs',
     'unlimitedStorage',
     'storage',
-    // This permission for running task periodically.
-    // Used in feature: Take a break
+    // This permission is needed for "Take a break" feature
     'alarms',
   ],
   content_scripts: [
