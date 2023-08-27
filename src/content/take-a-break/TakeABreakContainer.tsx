@@ -3,7 +3,7 @@ import { type IBreakTimeMessage } from '../../domain/take-a-break'
 import {
   MessageType,
   createMessageHandler,
-  sendMessage,
+  sendMessageToServiceWorker,
   type IAddMoreBreakTime,
 } from '../../util/messages'
 import TakeABreakPopup from './TakeABreakPopup'
@@ -28,7 +28,7 @@ export default function TakeABreakReminder() {
   const onAddMoreTime: React.ComponentProps<
     typeof TakeABreakPopup
   >['onAddMoreTime'] = async ({ num, unit }) => {
-    await sendMessage<IAddMoreBreakTime>({
+    await sendMessageToServiceWorker<IAddMoreBreakTime>({
       data: { num, unit },
       topic: MessageType.ADD_MORE_BREAK_TIME,
     })

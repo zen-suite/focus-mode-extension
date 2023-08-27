@@ -16,6 +16,7 @@ export function isValidMessage<T>(message: any): message is IMessage<T> {
 export enum MessageType {
   TAKE_A_BREAK = 'TAKE_A_BREAK',
   ADD_MORE_BREAK_TIME = 'ADD_MORE_BREAK_TIME',
+  PROCESS_BREAK_TIME_REMINDER = 'PROCESS_BREAK_TIME_REMINDER',
 }
 
 export interface IMessage<T = any> {
@@ -23,13 +24,19 @@ export interface IMessage<T = any> {
   topic: MessageType
 }
 
-export type Message = IAddMoreBreakTime | { topic: MessageType.TAKE_A_BREAK }
+export type Message =
+  | IAddMoreBreakTime
+  | {
+      topic: MessageType.TAKE_A_BREAK | MessageType.PROCESS_BREAK_TIME_REMINDER
+    }
 
 export interface IAddMoreBreakTime extends IMessage {
   data: { num: number; unit: dayjs.ManipulateType }
   topic: MessageType.ADD_MORE_BREAK_TIME
 }
 
-export async function sendMessage<T extends IMessage>(message: T) {
+export async function sendMessageToServiceWorker<T extends IMessage>(
+  message: T
+) {
   return await chrome.runtime.sendMessage(message)
 }

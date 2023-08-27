@@ -98,6 +98,8 @@ export default function TakeABreakPopup(props: {
         mt: 1,
         mr: 1,
         position: 'fixed',
+        // To display on top of host website's content
+        zIndex: 2147483648,
       }}
     >
       <CardHeader title="Focus mode extension" />

@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { getBlockSiteStorage } from '../domain/block-site'
 import AppThemeProvider from '../providers/AppThemeProvider'
 import { extractDomain } from '../util/host'
@@ -20,13 +20,15 @@ import Content from './Content'
   const contentRoot = document.createElement('div')
   contentRoot.id = 'zen-mode-content-root'
   document.body.append(contentRoot)
+  const root = createRoot(contentRoot, {
+    identifierPrefix: 'zen-mode',
+  })
 
-  ReactDOM.render(
+  root.render(
     <React.StrictMode>
       <AppThemeProvider>
         <Content />
       </AppThemeProvider>
-    </React.StrictMode>,
-    contentRoot
+    </React.StrictMode>
   )
 })()

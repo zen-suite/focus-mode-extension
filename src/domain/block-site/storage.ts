@@ -8,6 +8,7 @@ import {
   removeBlockedSite,
   type IBlockedSite,
 } from './block-site'
+import { TAKE_A_BREAK_ALARM } from './constants'
 
 export const BLOCKED_SITE_TABLE_NAME = 'BLOCKED_SITES'
 
@@ -84,6 +85,9 @@ export class BlockSiteStorage {
 
   async setBreakTime(breakTime: Date) {
     await this.storageInstance.update('breakUntil', breakTime.toISOString())
+    await chrome.alarms.create(TAKE_A_BREAK_ALARM, {
+      when: breakTime.getTime(),
+    })
     await this.toggleSitesBlock(false)
   }
 
