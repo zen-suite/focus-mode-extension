@@ -1,4 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/react'
+import dayjs from 'dayjs'
 import TakeABreakPopup from './TakeABreakPopup'
 
 const meta: Meta<typeof TakeABreakPopup> = {
@@ -9,7 +10,7 @@ type Story = StoryObj<typeof TakeABreakPopup>
 
 export const Default: Story = {
   args: {
-    breakUntil: new Date().toISOString(),
+    breakUntil: dayjs().add(2, 'minute').toISOString(),
   },
   argTypes: {
     onAddMoreTime: {

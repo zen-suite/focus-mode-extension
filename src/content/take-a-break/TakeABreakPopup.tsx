@@ -1,6 +1,13 @@
-import { Card, CardActions, CardContent, Button } from '@mui/material'
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  Typography,
+  CardHeader,
+} from '@mui/material'
 import dayjs from 'dayjs'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import TakeABreakCountdown from './TakeABreakCountdown'
 
 export default function TakeABreakPopup(props: {
@@ -27,26 +34,40 @@ export default function TakeABreakPopup(props: {
     setIsDismissed(false)
   }, [props.breakUntil])
 
-  if (isDismissed) {
-    return <Fragment />
-  }
-
-  async function onAddMoreTime() {
+  const onAddMoreTime = useCallback(async () => {
     await props.onAddMoreTime({ num: 5, unit: 'minute' })
     setIsDismissed(true)
-  }
+  }, [props])
 
-  return (
-    <Card
-      sx={{
-        top: 0,
-        right: 0,
-        mt: 1,
-        mr: 1,
-        position: 'absolute',
-      }}
-    >
-      <CardContent>
+  const cardContent = useMemo(() => {
+    if (countdown <= 0) {
+      return (
+        <Fragment>
+          <Typography mb={2}>
+            Break time is up. Click reload to block the website.
+          </Typography>
+          <CardActions sx={{ px: 0 }}>
+            <Button
+              onClick={() => {
+                setIsDismissed(true)
+              }}
+            >
+              Dismiss
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                location.reload()
+              }}
+            >
+              Reload webpage
+            </Button>
+          </CardActions>
+        </Fragment>
+      )
+    }
+    return (
+      <Fragment>
         <TakeABreakCountdown countdown={countdown} />
         <CardActions>
           <Button onClick={onAddMoreTime}>+5 more min</Button>
@@ -59,7 +80,26 @@ export default function TakeABreakPopup(props: {
             Dismiss
           </Button>
         </CardActions>
-      </CardContent>
+      </Fragment>
+    )
+  }, [countdown, onAddMoreTime])
+
+  if (isDismissed) {
+    return <Fragment />
+  }
+
+  return (
+    <Card
+      sx={{
+        top: 0,
+        right: 0,
+        mt: 1,
+        mr: 1,
+        position: 'fixed',
+      }}
+    >
+      <CardHeader title="Focus mode extension" />
+      <CardContent>{cardContent}</CardContent>
     </Card>
   )
 }
