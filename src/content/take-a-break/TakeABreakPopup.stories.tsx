@@ -16,6 +16,11 @@ export const Default: Story = {
     onAddMoreTime: {
       action: 'added more time',
     },
+    breakUntil: {
+      control: {
+        type: 'date',
+      },
+    },
   },
 }
 
