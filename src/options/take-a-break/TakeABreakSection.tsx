@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getBlockSiteStorage } from '../../domain/block-site'
 import { useBlockedSites } from '../../providers/BlockedSitesProvider'

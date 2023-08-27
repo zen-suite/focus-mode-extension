@@ -1,10 +1,4 @@
-import {
-  Box,
-  FormControlLabel,
-  FormHelperText,
-  Switch,
-  Typography,
-} from '@mui/material'
+import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
 import { getBlockSiteStorage } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
