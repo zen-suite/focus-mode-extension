@@ -18,6 +18,5 @@
     "strictNullChecks": true
   },
   "include": ["src"],
-  "exclude": ["src/background"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

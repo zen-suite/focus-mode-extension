@@ -5,6 +5,8 @@ import {
 } from '../domain/block-site'
 import { IBreakTimeMessage } from '../domain/take-a-break'
 import { Message, MessageType } from '../util/messages'
+import { TAKE_A_BREAK_CONFIG } from '../domain/config'
+import { extractDomain } from '../util/host'
 chrome.runtime.onInstalled.addListener(async () => {
   await getBlockSiteStorage().syncBlockedSites()
 
@@ -18,7 +20,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === TAKE_A_BREAK_ALARM_NAME) {
-    await breakOver()
+    await processBreakOver()
   }
 })
 
@@ -29,9 +31,10 @@ chrome.runtime.onMessage.addListener((message: Message) => {
   }
 })
 
-async function breakOver() {
+async function processBreakOver() {
   const storage = getBlockSiteStorage()
-  const breakTime = (await storage.get()).breakUntil
+  const storedData = await storage.get()
+  const breakTime = storedData.breakUntil
   if (!breakTime) {
     return
   }
@@ -41,14 +44,22 @@ async function breakOver() {
     await storage.update('breakUntil', undefined)
   }
 
-  if (breakTimeDayJS.diff(dayjs(), 'minute') <= 1) {
-    const tabs = await chrome.tabs.query({
-      currentWindow: true,
-    })
+  if (
+    breakTimeDayJS.diff(dayjs(), TAKE_A_BREAK_CONFIG.remindTime.unit) <=
+    TAKE_A_BREAK_CONFIG.remindTime.value
+  ) {
+    const tabs = await chrome.tabs.query({})
 
     await Promise.all(
       tabs.map(async (tab) => {
-        if (!tab.id) {
+        if (!tab.id || !tab.url) {
+          return
+        }
+        const tabDomain = extractDomain(tab.url).replace('www.', '')
+        const domainIsBlocked = storedData.blockedSites.some(
+          (blockedSite) => blockedSite.domain === tabDomain
+        )
+        if (!domainIsBlocked) {
           return
         }
         await chrome.tabs.sendMessage<IBreakTimeMessage>(tab.id, {
