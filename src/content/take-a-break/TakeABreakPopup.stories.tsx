@@ -10,7 +10,7 @@ type Story = StoryObj<typeof TakeABreakPopup>
 
 export const Default: Story = {
   args: {
-    breakUntil: dayjs().add(2, 'minute').toISOString(),
+    breakUntil: dayjs().add(1, 'minute').toISOString(),
   },
   argTypes: {
     onAddMoreTime: {

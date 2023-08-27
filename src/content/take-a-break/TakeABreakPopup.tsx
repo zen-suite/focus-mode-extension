@@ -17,7 +17,9 @@ export default function TakeABreakPopup(props: {
     unit: 'minute' | 'second'
   }) => void | Promise<void>
 }) {
-  const [countdown, setCountdown] = useState<number>(0)
+  const [countdown, setCountdown] = useState<number>(
+    dayjs(props.breakUntil).diff(dayjs(), 'second')
+  )
   const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export default function TakeABreakPopup(props: {
     return (
       <Fragment>
         <TakeABreakCountdown countdown={countdown} />
-        <CardActions>
+        <CardActions sx={{ px: 0 }}>
           <Button onClick={onAddMoreTime}>+5 more min</Button>
           <Button
             variant="contained"
