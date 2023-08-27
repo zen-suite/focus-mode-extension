@@ -1,32 +1,28 @@
 import { Box, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getBlockSiteStorage } from '../../domain/block-site'
+import { useBlockedSites } from '../../providers/BlockedSitesProvider'
 import { HOUR_FORMAT } from '../../util/date'
+import TakeABreakAlert from './TakeABreakAlert'
 import { TakeABreakItem } from './TakeABreakItem'
 
 export default function TakeABreakSection() {
   const storage = getBlockSiteStorage()
   const { enqueueSnackbar } = useSnackbar()
+  const { breakUntil, refetchSchema } = useBlockedSites()
   return (
-    <Box
-      sx={{
-        paddingY: 2,
-      }}
-    >
-      <Typography
-        variant="subtitle2"
+    <Box>
+      <Box
         sx={{
-          mb: 2,
+          my: 2,
         }}
-        color="text.secondary"
       >
-        This section contains configuration for taking a break. By taking a
-        break, the extension will temporarily disable blocking for specified
-        period of time and resume blocking after break is over.
-      </Typography>
+        <TakeABreakAlert breakUntil={breakUntil} />
+      </Box>
       <TakeABreakItem
-        onSetBreakTime={(breakTime) => {
-          storage.setBreakTime(breakTime.toDate())
+        onSetBreakTime={async (breakTime) => {
+          await storage.setBreakTime(breakTime.toDate())
+          await refetchSchema()
           enqueueSnackbar(
             `Website blocking will disable until ${breakTime.format(
               HOUR_FORMAT

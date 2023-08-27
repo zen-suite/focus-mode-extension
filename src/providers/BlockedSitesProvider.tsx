@@ -5,6 +5,7 @@ import { useQuery } from '../hooks/useQuery'
 interface IBlockedSitesContext {
   blockedSites: IBlockedSite[]
   enabledBlocking: boolean
+  breakUntil?: string
   refetchSchema: (searchValue?: string) => Promise<void>
   error: ReturnType<typeof useQuery>['error']
   loading: boolean
@@ -51,6 +52,7 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
       value={{
         blockedSites: schema?.blockedSites.slice().reverse() ?? [],
         enabledBlocking: schema?.enableBlocking ?? true,
+        breakUntil: schema?.breakUntil,
         error,
         refetchSchema: fetchData,
         loading,

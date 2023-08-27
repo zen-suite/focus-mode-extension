@@ -1,13 +1,20 @@
-import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  FormHelperText,
+  Switch,
+  Typography,
+} from '@mui/material'
 import { getBlockSiteStorage } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
+import TakeABreakAlert from './take-a-break/TakeABreakAlert'
 
 const blockedSiteStorage = getBlockSiteStorage()
 
 export default function () {
-  const { refetchSchema, enabledBlocking } = useBlockedSites()
+  const { refetchSchema, enabledBlocking, breakUntil } = useBlockedSites()
 
   async function onSiteBlockingToggle(checked: boolean) {
     await blockedSiteStorage.toggleSitesBlock(checked)
@@ -17,6 +24,7 @@ export default function () {
   return (
     <BlockedSitesSection
       enableBlocking={enabledBlocking}
+      breakUntil={breakUntil}
       toggleSitesBlocking={onSiteBlockingToggle}
     />
   )
@@ -24,10 +32,18 @@ export default function () {
 
 export function BlockedSitesSection(props: {
   enableBlocking: boolean
+  breakUntil?: string
   toggleSitesBlocking: (enable: boolean) => Promise<void>
 }) {
   return (
     <>
+      <Box
+        sx={{
+          mt: 2,
+        }}
+      >
+        <TakeABreakAlert breakUntil={props.breakUntil} />
+      </Box>
       <Box py={2}>
         <FormControlLabel
           control={
@@ -43,7 +59,6 @@ export function BlockedSitesSection(props: {
       </Box>
       <Box>
         <AddOrSearchBlockedSite />
-
         <Box
           style={{
             border: '0.5px solid gray',

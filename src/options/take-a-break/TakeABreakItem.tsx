@@ -33,12 +33,20 @@ export function TakeABreakItem(props: IProps) {
     )
   }
   return (
-    <Card
-      sx={{
-        py: 2,
-      }}
-    >
+    <Card>
       <CardContent>
+        <Typography
+          variant="caption"
+          sx={{
+            mb: 2,
+          }}
+          component="p"
+          color="text.secondary"
+        >
+          This section contains configuration for taking a break. By taking a
+          break, the extension will temporarily disable blocking for specified
+          period of time and resume blocking after break is over.
+        </Typography>
         <Typography>Take a break till:</Typography>
         <TimePicker
           value={breakTime}

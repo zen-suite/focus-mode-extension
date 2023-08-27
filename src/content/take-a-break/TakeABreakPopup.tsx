@@ -102,7 +102,7 @@ export default function TakeABreakPopup(props: {
         zIndex: 2147483648,
       }}
     >
-      <CardHeader title="Focus mode extension" />
+      <CardHeader title="Zen mode - Block distractions" />
       <CardContent>{cardContent}</CardContent>
     </Card>
   )

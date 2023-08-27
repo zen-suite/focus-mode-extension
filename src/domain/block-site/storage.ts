@@ -40,6 +40,7 @@ export class BlockSiteStorage {
 
   private async enableSitesBlock() {
     await this.syncBlockedSites()
+    await this.update('breakUntil', undefined)
   }
 
   private async disableSitesBlock() {
