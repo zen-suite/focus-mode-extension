@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { getBlockSiteStorage } from '../domain/block-site'
 import AppThemeProvider from '../providers/AppThemeProvider'
 import { extractDomain } from '../util/host'
-import Content from './Content'
+import { Content } from './Content'
 ;(async () => {
   const storage = getBlockSiteStorage()
   const currentDomain = extractDomain(window.location.href).replace('www.', '')
