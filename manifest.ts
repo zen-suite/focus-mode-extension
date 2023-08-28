@@ -30,6 +30,14 @@ export const manifest: ManifestV3Export = {
     'tabs',
     'unlimitedStorage',
     'storage',
+    // This permission is needed for "Take a break" feature
+    'alarms',
+  ],
+  content_scripts: [
+    {
+      js: ['src/content/main.tsx'],
+      matches: ['https://*/*', 'http://*/*'],
+    },
   ],
   // Host permissions for all urls is needed because websites to block are determined by users.
   // Thus extension does not know which urls to block in advance

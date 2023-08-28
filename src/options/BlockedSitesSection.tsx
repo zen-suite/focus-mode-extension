@@ -1,39 +1,24 @@
 import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import { getBlockSiteStorage } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
+import TakeABreakAlert from './take-a-break/TakeABreakAlert'
 
 const blockedSiteStorage = getBlockSiteStorage()
 
 export default function () {
-  const [enableBlocking, setEnableBlocking] = useState<boolean>(true)
-  const { refetchSchema } = useBlockedSites()
-
-  useEffect(() => {
-    async function loadEnableBlocking() {
-      const enableBlocking = await blockedSiteStorage.getEnableBlocking()
-      setEnableBlocking(enableBlocking ?? true)
-    }
-    loadEnableBlocking()
-  }, [])
+  const { refetchSchema, enabledBlocking, breakUntil } = useBlockedSites()
 
   async function onSiteBlockingToggle(checked: boolean) {
     await blockedSiteStorage.toggleSitesBlock(checked)
-    setEnableBlocking(checked)
-
-    if (checked) {
-      await blockedSiteStorage.enableSitesBlock()
-    } else {
-      await blockedSiteStorage.disableSitesBlock()
-    }
     await refetchSchema()
   }
 
   return (
     <BlockedSitesSection
-      enableBlocking={enableBlocking}
+      enableBlocking={enabledBlocking}
+      breakUntil={breakUntil}
       toggleSitesBlocking={onSiteBlockingToggle}
     />
   )
@@ -41,12 +26,19 @@ export default function () {
 
 export function BlockedSitesSection(props: {
   enableBlocking: boolean
+  breakUntil?: string
   toggleSitesBlocking: (enable: boolean) => Promise<void>
 }) {
   return (
     <>
-      <Box display="flex">
-        <AddOrSearchBlockedSite />
+      <Box
+        sx={{
+          mt: 2,
+        }}
+      >
+        <TakeABreakAlert breakUntil={props.breakUntil} />
+      </Box>
+      <Box py={2}>
         <FormControlLabel
           control={
             <Switch
@@ -56,18 +48,19 @@ export function BlockedSitesSection(props: {
               }}
             />
           }
-          label={
-            <Typography variant="caption">Enable site blocking</Typography>
-          }
+          label={<Typography>Enable site blocking</Typography>}
         />
       </Box>
-      <Box
-        style={{
-          border: '0.5px solid gray',
-          borderRadius: '10px',
-        }}
-      >
-        <BlockedSitesList />
+      <Box>
+        <AddOrSearchBlockedSite />
+        <Box
+          style={{
+            border: '0.5px solid gray',
+            borderRadius: '10px',
+          }}
+        >
+          <BlockedSitesList />
+        </Box>
       </Box>
     </>
   )

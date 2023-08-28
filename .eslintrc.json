@@ -6,7 +6,8 @@
   "extends": [
     "plugin:react/recommended",
     "standard-with-typescript",
-    "prettier"
+    "prettier",
+    "plugin:storybook/recommended"
   ],
   "overrides": [],
   "parserOptions": {

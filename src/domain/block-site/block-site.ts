@@ -28,11 +28,11 @@ function getBlockChromeRule(
 }
 
 export async function addBlockedSite(domain: string): Promise<void> {
-  const existingBlockedSite = await findBlockedSiteByDomain(domain)
+  const existingBlockedSites = await filterBlockedSitesByDomain(domain)
   const blockedSiteId = await getNextBlockedSiteIndex()
   await chrome.declarativeNetRequest.updateDynamicRules({
     addRules: [getBlockChromeRule(blockedSiteId, domain)],
-    removeRuleIds: existingBlockedSite ? [existingBlockedSite.id] : [],
+    removeRuleIds: existingBlockedSites.map((site) => site.id),
   })
 }
 
@@ -64,23 +64,24 @@ export async function getNextBlockedSiteIndex(): Promise<number> {
   return lastBlockedSite.id + 1
 }
 
-export async function findBlockedSiteByDomain(
+export async function filterBlockedSitesByDomain(
   domain: string
-): Promise<IBlockedSite | undefined> {
+): Promise<IBlockedSite[]> {
   if (!domain.trim()) {
-    return undefined
+    return []
   }
   const blockedSites = await getBlockedSites()
-  return blockedSites.find((site) => site.domain === domain)
+  return blockedSites.filter((site) => site.domain === domain)
 }
 
 export async function removeBlockedSite(domain: string): Promise<void> {
-  const existingSite = await findBlockedSiteByDomain(domain)
-  if (!existingSite) {
+  const existingSites = await filterBlockedSitesByDomain(domain)
+
+  if (!existingSites) {
     return
   }
   await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [existingSite.id],
+    removeRuleIds: existingSites.map((site) => site.id),
   })
 }
 
