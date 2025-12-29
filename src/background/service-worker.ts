@@ -8,12 +8,22 @@ import { IBreakTimeMessage } from '../domain/take-a-break'
 import { Message, MessageType } from '../util/messages'
 import { TAKE_A_BREAK_CONFIG } from '../domain/config'
 import { extractDomain } from '../util/host'
-chrome.runtime.onInstalled.addListener(async () => {
-  await getBlockSiteStorage().syncBlockedSites()
+async function initializeExtension() {
+  const storage = getBlockSiteStorage()
+  const enableBlocking = await storage.getEnableBlocking()
+  await storage.toggleSitesBlock(enableBlocking)
   await chrome.alarms.create(TAKE_A_BREAK_REMINDER_ALARM, {
     delayInMinutes: 0,
     periodInMinutes: 1,
   })
+}
+
+chrome.runtime.onInstalled.addListener(async () => {
+  await initializeExtension()
+})
+
+chrome.runtime.onStartup.addListener(async () => {
+  await initializeExtension()
 })
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
