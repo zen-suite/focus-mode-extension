@@ -59,6 +59,32 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
     fetchData()
   }, [fetchData])
 
+  useEffect(() => {
+    function handleStorageChange(
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string
+    ) {
+      if (areaName !== 'local') {
+        return
+      }
+
+      if (
+        changes.blockedSites ||
+        changes.enableBlocking ||
+        changes.breakUntil ||
+        changes.pomodoro
+      ) {
+        fetchData()
+      }
+    }
+
+    chrome.storage.onChanged.addListener(handleStorageChange)
+
+    return () => {
+      chrome.storage.onChanged.removeListener(handleStorageChange)
+    }
+  }, [fetchData])
+
   return (
     <BlockedSitesContext.Provider
       value={{

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
 import { PomodoroStatus } from '../components/PomodoroStatus'
@@ -24,8 +17,6 @@ interface IInjectedProps {
   goToOptionsPage: () => void
   currentDomain: string | undefined
   pomodoro: IPomodoroState
-  onStartPomodoro: () => Promise<void>
-  onStopPomodoro: () => Promise<void>
 }
 
 function useIsDomainValid() {
@@ -66,17 +57,6 @@ export default function AppContentContainer() {
     await getBlockSiteStorage().addBlockSite(currentDomain)
     await refetchBlockedSites()
   }
-
-  async function startPomodoro() {
-    await getBlockSiteStorage().startPomodoro()
-    await refetchBlockedSites()
-  }
-
-  async function stopPomodoro() {
-    await getBlockSiteStorage().stopPomodoro()
-    await refetchBlockedSites()
-  }
-
   const validDomain = useIsDomainValid()
 
   function goToOptionsPage() {
@@ -95,15 +75,12 @@ export default function AppContentContainer() {
       goToOptionsPage={goToOptionsPage}
       currentDomain={currentDomain}
       pomodoro={pomodoro}
-      onStartPomodoro={startPomodoro}
-      onStopPomodoro={stopPomodoro}
     />
   )
 }
 
 export function AppContent(props: IInjectedProps) {
   const [loading, setLoading] = useState(false)
-  const [pomodoroLoading, setPomodoroLoading] = useState(false)
 
   const isDomainAlreadyBlocked = useMemo(() => {
     return Boolean(
@@ -136,22 +113,6 @@ export function AppContent(props: IInjectedProps) {
     }
   }
 
-  async function onPomodoroClick() {
-    try {
-      setPomodoroLoading(true)
-      if (props.pomodoro.isActive) {
-        await props.onStopPomodoro()
-      } else {
-        await props.onStartPomodoro()
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error)
-    } finally {
-      setPomodoroLoading(false)
-    }
-  }
-
   return (
     <div className="App">
       <h1>Zen mode extension</h1>
@@ -174,6 +135,12 @@ export function AppContent(props: IInjectedProps) {
           </Typography>
         )}
 
+        {props.pomodoro.isActive && (
+          <Box mt={2}>
+            <PomodoroStatus pomodoro={props.pomodoro} />
+          </Box>
+        )}
+
         <AppLink
           marginY={5}
           display="block"
@@ -182,26 +149,6 @@ export function AppContent(props: IInjectedProps) {
         >
           Go to options page
         </AppLink>
-
-        <Box mt={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" mb={2}>
-                Pomodoro
-              </Typography>
-              <PomodoroStatus pomodoro={props.pomodoro} />
-            </CardContent>
-            <CardActions sx={{ px: 2, pb: 2 }}>
-              <Button
-                variant="contained"
-                disabled={pomodoroLoading}
-                onClick={onPomodoroClick}
-              >
-                {props.pomodoro.isActive ? 'Stop pomodoro' : 'Start pomodoro'}
-              </Button>
-            </CardActions>
-          </Card>
-        </Box>
       </div>
     </div>
   )

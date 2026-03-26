@@ -19,12 +19,12 @@ describe(AppContent, () => {
           focusDurationMinutes: 25,
           breakDurationMinutes: 5,
         }}
-        onStartPomodoro={vitest.fn()}
-        onStopPomodoro={vitest.fn()}
       />
     )
 
-    expect(screen.getByText('Start pomodoro')).not.toBeNull()
+    expect(
+      screen.getByText('Pomodoro is off. Focus 25 min, break 5 min.')
+    ).not.toBeNull()
   })
 
   it('renders pomodoro status when active', () => {
@@ -42,8 +42,6 @@ describe(AppContent, () => {
           breakDurationMinutes: 5,
           phaseEndsAt: dayjs().add(5, 'minute').toISOString(),
         }}
-        onStartPomodoro={vitest.fn()}
-        onStopPomodoro={vitest.fn()}
       />
     )
 

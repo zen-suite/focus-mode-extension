@@ -7,7 +7,7 @@
     "node": "18.14.2"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "nodemon --watch src --watch public --watch manifest.ts --ext ts,tsx,css,html,json,jpg,png --exec \"yarn build\"",
     "typecheck": "tsc --noEmit",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -74,6 +74,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.13",
     "jsdom": "^22.1.0",
+    "nodemon": "^3.1.14",
     "prettier": "^2.8.7",
     "semantic-release": "^21.0.1",
     "storybook": "^7.3.2",

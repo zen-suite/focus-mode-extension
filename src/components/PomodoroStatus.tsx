@@ -1,4 +1,5 @@
 import { Alert, Box, Typography } from '@mui/material'
+import { LocalCafeOutlined, PlayArrow } from '@mui/icons-material'
 import { useMemo } from 'react'
 import { PomodoroPhase, type IPomodoroState } from '../domain/block-site'
 import { useCountdown } from '../hooks/useCountdown'
@@ -35,10 +36,17 @@ export function PomodoroStatus(props: {
     )
   }
 
+  const isFocusPhase = props.pomodoro.phase === PomodoroPhase.FOCUS
+
   return (
     <Alert
-      severity={
-        props.pomodoro.phase === PomodoroPhase.FOCUS ? 'warning' : 'success'
+      severity={isFocusPhase ? 'success' : 'warning'}
+      icon={
+        isFocusPhase ? (
+          <PlayArrow fontSize="inherit" />
+        ) : (
+          <LocalCafeOutlined fontSize="inherit" />
+        )
       }
     >
       <Box>
