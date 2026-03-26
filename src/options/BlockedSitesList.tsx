@@ -1,4 +1,4 @@
-import { Box, CircularProgress, List, Typography } from '@mui/material'
+import { Box, CircularProgress, List, Paper, Typography } from '@mui/material'
 import { type IBlockedSite } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import BlockedSiteItem from './BlockedSiteItem'
@@ -18,25 +18,36 @@ export default function () {
 
 export function BlockedSitesList(props: IInjectedProps) {
   if (props.loading) {
-    return <CircularProgress />
+    return (
+      <Box py={4} textAlign="center">
+        <CircularProgress />
+      </Box>
+    )
   }
 
   if (!props.blockedSites?.length && !props.loading) {
     return (
-      <Typography variant="subtitle2" padding="15px 10px">
-        You have not blocked any websites yet.
-      </Typography>
+      <Paper sx={{ px: 2, py: 3, textAlign: 'center' }}>
+        <Typography variant="subtitle2">
+          You have not blocked any websites yet.
+        </Typography>
+        <Typography color="text.secondary" mt={1} variant="body2">
+          Add a domain above to start filtering distractions.
+        </Typography>
+      </Paper>
     )
   }
   return (
-    <Box>
+    <Paper sx={{ overflow: 'hidden' }}>
       {!props.enabledBlocking && (
         <Typography
-          variant="subtitle1"
+          variant="subtitle2"
           sx={{
             textAlign: 'center',
+            borderBottom: 1,
+            borderColor: 'divider',
           }}
-          paddingY={1}
+          paddingY={1.5}
         >
           You have <strong>disabled</strong> website blocking. Changes will not
           take effect.
@@ -59,6 +70,6 @@ export function BlockedSitesList(props: IInjectedProps) {
           )
         })}
       </List>
-    </Box>
+    </Paper>
   )
 }

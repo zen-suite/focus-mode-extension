@@ -1,5 +1,6 @@
 import { Box, Paper, Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
+import { PomodoroActiveNotice } from '../components/PomodoroActiveNotice'
 import { PomodoroPhase } from '../domain/block-site'
 import { useCountdown } from '../hooks/useCountdown'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
@@ -37,13 +38,11 @@ export default function BlockedSite() {
 
             {pomodoro.isActive && (
               <Box className={styles.pomodoroPanel}>
-                <Typography variant="subtitle2">{pomodoroLabel}</Typography>
-                <Typography className={styles.countdown} variant="h4">
-                  {formatCountdown(countdown)}
-                </Typography>
-                <Typography color="text.secondary" variant="body2">
-                  Pomodoro controls stay in the extension settings.
-                </Typography>
+                <PomodoroActiveNotice
+                  title={pomodoroLabel}
+                  countdown={formatCountdown(countdown)}
+                  description="Pomodoro controls stay in the extension settings."
+                />
               </Box>
             )}
           </Stack>

@@ -12,9 +12,10 @@ describe(TakeABreakItem, () => {
       </LocalizationProvider>
     )
 
+    expect(screen.getByText('Pomodoro is active')).not.toBeNull()
     expect(
       screen.getByText(
-        'Pomodoro is active and currently controls website blocking.'
+        'Pomodoro currently controls website blocking, so break controls are unavailable.'
       )
     ).not.toBeNull()
     expect(screen.getByText('Set break time')).toBeDisabled()

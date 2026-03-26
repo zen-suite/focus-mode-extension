@@ -28,10 +28,15 @@ export function PomodoroStatus(props: {
   if (!props.pomodoro.isActive) {
     return (
       <Alert severity="info">
-        {props.inactiveMessage ??
-          `Pomodoro is off. Focus ${formatMinutes(
-            props.pomodoro.focusDurationMinutes
-          )}, break ${formatMinutes(props.pomodoro.breakDurationMinutes)}.`}
+        <Box>
+          <Typography variant="subtitle2">Pomodoro is off</Typography>
+          <Typography variant="body2">
+            {props.inactiveMessage ??
+              `Focus ${formatMinutes(
+                props.pomodoro.focusDurationMinutes
+              )}, break ${formatMinutes(props.pomodoro.breakDurationMinutes)}.`}
+          </Typography>
+        </Box>
       </Alert>
     )
   }
@@ -50,8 +55,10 @@ export function PomodoroStatus(props: {
       }
     >
       <Box>
-        <Typography fontWeight={700}>{phaseLabel} session</Typography>
-        <Typography>{formatCountdown(countdown)} remaining</Typography>
+        <Typography variant="subtitle2">{phaseLabel} session</Typography>
+        <Typography variant="body2">
+          {formatCountdown(countdown)} remaining
+        </Typography>
       </Box>
     </Alert>
   )

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Paper, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { BlockedSitesProvider } from '../providers/BlockedSitesProvider'
 import BlockedSitesSection from './BlockedSitesSection'
@@ -28,24 +28,42 @@ export default function Options(): JSX.Element {
 
   return (
     <BlockedSitesProvider>
-      <Typography
-        variant="h6"
-        paddingX={4}
-        paddingY={2}
-        borderBottom={1}
-        borderColor="primary.dark"
-      >
-        Settings
-      </Typography>
       <div className={styles.container}>
-        <Box minWidth={300} borderRight={1} borderColor="primary.dark">
-          <SettingsList
-            currentTab={currentSettingTab}
-            onTabSelected={setSettingTab}
-          />
+        <Box
+          sx={{
+            width: 320,
+            borderRight: 1,
+            borderColor: 'divider',
+            p: 3,
+          }}
+        >
+          <Stack spacing={3}>
+            <Box>
+              <Typography color="text.secondary" variant="overline">
+                Focus Mode
+              </Typography>
+              <Typography variant="h4">Settings</Typography>
+              <Typography color="text.secondary" mt={1} variant="body2">
+                Keep the extension quiet, direct, and easy to adjust.
+              </Typography>
+            </Box>
+            <Paper sx={{ p: 1 }}>
+              <SettingsList
+                currentTab={currentSettingTab}
+                onTabSelected={setSettingTab}
+              />
+            </Paper>
+          </Stack>
         </Box>
-        <Box flexGrow={1} paddingX={4}>
-          {settingSection}
+        <Box className={styles.content} sx={{ p: 4 }}>
+          <Paper
+            sx={{
+              minHeight: '100%',
+              p: 4,
+            }}
+          >
+            {settingSection}
+          </Paper>
         </Box>
       </div>
     </BlockedSitesProvider>

@@ -1,4 +1,5 @@
-import { Box, TextField } from '@mui/material'
+import { Box, InputAdornment, TextField } from '@mui/material'
+import { Search } from '@mui/icons-material'
 import {
   useCallback,
   useEffect,
@@ -77,9 +78,9 @@ export function AddOrSearchBlockedSite({
       return
     }
     return (
-      <div>
+      <span>
         Press enter to add <strong>{value}</strong>
-      </div>
+      </span>
     )
   }, [canAddSite, value])
 
@@ -87,19 +88,12 @@ export function AddOrSearchBlockedSite({
     <Box
       sx={{
         display: 'flex',
-        paddingY: '15px',
         width: '100%',
       }}
     >
-      <Box
-        sx={{
-          flex: 'auto',
-          paddingRight: '10px',
-        }}
-      >
+      <Box sx={{ flex: 'auto' }}>
         <TextField
           fullWidth
-          variant="standard"
           size="small"
           placeholder="Type website to search or add"
           value={value}
@@ -107,6 +101,13 @@ export function AddOrSearchBlockedSite({
             setValue(event.target.value)
           }}
           onKeyDown={onKeyDown}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
           helperText={
             showError
               ? 'Please enter valid domain to add website'

@@ -9,6 +9,7 @@ import {
 import { TimePicker } from '@mui/x-date-pickers'
 import dayjs, { type ManipulateType, type Dayjs } from 'dayjs'
 import { useState } from 'react'
+import { PomodoroActiveNotice } from '../../components/PomodoroActiveNotice'
 
 interface IProps {
   onSetBreakTime: (breakTime: Dayjs) => void | Promise<void>
@@ -49,9 +50,12 @@ export function TakeABreakItem(props: IProps) {
           period of time and resume blocking after break is over.
         </Typography>
         {props.disabled && (
-          <Typography color="warning.main" variant="body2" mb={2}>
-            Pomodoro is active and currently controls website blocking.
-          </Typography>
+          <Box mb={2}>
+            <PomodoroActiveNotice
+              title="Pomodoro is active"
+              description="Pomodoro currently controls website blocking, so break controls are unavailable."
+            />
+          </Box>
         )}
         <Typography>Take a break till:</Typography>
         <TimePicker

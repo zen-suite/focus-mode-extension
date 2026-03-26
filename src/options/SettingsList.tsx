@@ -1,15 +1,35 @@
-import { List, ListItem, ListItemButton } from '@mui/material'
-import React from 'react'
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material'
 import { SettingTab } from './types'
+
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+const SETTING_META: Record<SettingTab, { title: string; description: string }> =
+  {
+    [SettingTab.BLOCKED_SITES]: {
+      title: 'Blocked sites',
+      description: 'Manage your distraction list and blocking state.',
+    },
+    [SettingTab.TAKE_A_BREAK]: {
+      title: 'Take a break',
+      description: 'Temporarily pause blocking for a planned break.',
+    },
+    [SettingTab.POMODORO]: {
+      title: 'Pomodoro',
+      description: 'Run timed focus and break sessions.',
+    },
+  }
 
 export default function SettingsList(props: {
   className?: string
   currentTab: SettingTab
   onTabSelected: (setting: SettingTab) => void
 }) {
-  const SettingsListItem = (
-    itemProps: React.PropsWithChildren<{ tab: SettingTab }>
-  ) => {
+  const SettingsListItem = (itemProps: { tab: SettingTab }) => {
     return (
       <ListItem>
         <ListItemButton
@@ -18,24 +38,27 @@ export default function SettingsList(props: {
           }}
           selected={itemProps.tab === props.currentTab}
           sx={{
-            paddingX: 4,
-            paddingY: 2,
+            paddingX: 2,
+            paddingY: 1.5,
           }}
         >
-          {itemProps.children}
+          <ListItemText
+            primary={
+              <Typography variant="subtitle2">
+                {SETTING_META[itemProps.tab].title}
+              </Typography>
+            }
+            secondary={SETTING_META[itemProps.tab].description}
+          />
         </ListItemButton>
       </ListItem>
     )
   }
   return (
     <List className={props.className}>
-      <SettingsListItem tab={SettingTab.BLOCKED_SITES}>
-        Blocked sites
-      </SettingsListItem>
-      <SettingsListItem tab={SettingTab.TAKE_A_BREAK}>
-        Take a break
-      </SettingsListItem>
-      <SettingsListItem tab={SettingTab.POMODORO}>Pomodoro</SettingsListItem>
+      <SettingsListItem tab={SettingTab.BLOCKED_SITES} />
+      <SettingsListItem tab={SettingTab.TAKE_A_BREAK} />
+      <SettingsListItem tab={SettingTab.POMODORO} />
     </List>
   )
 }

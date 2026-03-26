@@ -11,7 +11,7 @@ export default function TakeABreakAlert(props: {
   }
 
   return (
-    <Alert severity="info">
+    <Alert icon={false} severity="info">
       Website blocking is temporarily disabled until{' '}
       {breakUntilDayJS.format('hh:mm a')}.
     </Alert>
