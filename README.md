@@ -56,6 +56,10 @@ yarn dev
 
 After running dev server, you can install `dist` directory as chrome extension using [load unpack extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked).
 
+![alt text](docs/image.png)
+
+Whenever you make an update, go to [chrome extensions page](chrome://extensions) and click reload button to reflect your changes
+
 ## Testing
 
 - Running test watch command
