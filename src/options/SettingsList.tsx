@@ -35,6 +35,7 @@ export default function SettingsList(props: {
       <SettingsListItem tab={SettingTab.TAKE_A_BREAK}>
         Take a break
       </SettingsListItem>
+      <SettingsListItem tab={SettingTab.POMODORO}>Pomodoro</SettingsListItem>
     </List>
   )
 }
