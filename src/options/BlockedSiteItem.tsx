@@ -25,6 +25,14 @@ export default function (props: IProps): JSX.Element {
 export function BlockedSiteItem(props: IProps & InjectedProps): JSX.Element {
   return (
     <ListItem
+      sx={{
+        mb: 0.75,
+        px: 2,
+        py: 1,
+        border: 1,
+        borderColor: 'divider',
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+      }}
       secondaryAction={
         <IconButton
           edge="end"

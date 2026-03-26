@@ -89,7 +89,7 @@ export function BlockedSitesSection(props: {
       </Paper>
       <Box>
         <AddOrSearchBlockedSite />
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2.5 }}>
           <BlockedSitesList />
         </Box>
       </Box>

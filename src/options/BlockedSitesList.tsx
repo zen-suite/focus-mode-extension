@@ -27,7 +27,7 @@ export function BlockedSitesList(props: IInjectedProps) {
 
   if (!props.blockedSites?.length && !props.loading) {
     return (
-      <Paper sx={{ px: 2, py: 3, textAlign: 'center' }}>
+      <Paper sx={{ px: 2.5, py: 3.5, textAlign: 'center' }}>
         <Typography variant="subtitle2">
           You have not blocked any websites yet.
         </Typography>
@@ -46,6 +46,7 @@ export function BlockedSitesList(props: IInjectedProps) {
             textAlign: 'center',
             borderBottom: 1,
             borderColor: 'divider',
+            backgroundColor: 'rgba(255, 255, 255, 0.04)',
           }}
           paddingY={1.5}
         >
@@ -55,6 +56,7 @@ export function BlockedSitesList(props: IInjectedProps) {
       )}
       <List
         sx={{
+          p: 1,
           opacity: props.enabledBlocking ? 1 : 0.5,
         }}
       >

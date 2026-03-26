@@ -4,20 +4,26 @@ import { useMemo } from 'react'
 
 export default function AppThemeProvider(props: React.PropsWithChildren) {
   const theme = useMemo(() => {
+    const appBackground = '#0b0b0b'
+    const paperBackground = '#161616'
+    const elevatedBackground = '#1d1d1d'
+    const borderColor = alpha('#ffffff', 0.14)
+    const strongBorderColor = alpha('#ffffff', 0.22)
+
     return createTheme({
       palette: {
         mode: 'dark',
         background: {
-          default: '#111111',
-          paper: '#181818',
+          default: appBackground,
+          paper: paperBackground,
         },
         text: {
           primary: '#f5f5f5',
-          secondary: grey[500],
+          secondary: grey[400],
         },
-        divider: alpha('#ffffff', 0.1),
+        divider: borderColor,
         primary: {
-          main: grey[300],
+          main: grey[200],
           dark: grey[800],
         },
       },
@@ -48,8 +54,9 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
         MuiCssBaseline: {
           styleOverrides: {
             body: {
+              backgroundColor: appBackground,
               backgroundImage:
-                'radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 35%)',
+                'radial-gradient(circle at top, rgba(255,255,255,0.09), transparent 38%)',
             },
           },
         },
@@ -61,19 +68,20 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
             root: {
               borderRadius: 999,
               paddingInline: 16,
+              borderWidth: 1,
             },
             contained: {
               backgroundColor: grey[100],
               color: grey[900],
               '&:hover': {
-                backgroundColor: grey[300],
+                backgroundColor: grey[200],
               },
             },
             outlined: {
-              borderColor: alpha('#ffffff', 0.16),
+              borderColor,
               '&:hover': {
-                borderColor: alpha('#ffffff', 0.28),
-                backgroundColor: alpha('#ffffff', 0.04),
+                borderColor: strongBorderColor,
+                backgroundColor: alpha('#ffffff', 0.08),
               },
             },
           },
@@ -82,7 +90,9 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
           styleOverrides: {
             root: {
               backgroundImage: 'none',
-              border: `1px solid ${alpha('#ffffff', 0.08)}`,
+              backgroundColor: paperBackground,
+              border: `1px solid ${borderColor}`,
+              boxShadow: `0 0 0 1px ${alpha('#000000', 0.12)}`,
             },
           },
         },
@@ -90,8 +100,10 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
           styleOverrides: {
             root: {
               backgroundImage: 'none',
+              backgroundColor: elevatedBackground,
               borderRadius: 20,
-              border: `1px solid ${alpha('#ffffff', 0.08)}`,
+              border: `1px solid ${borderColor}`,
+              boxShadow: `0 20px 40px ${alpha('#000000', 0.24)}`,
             },
           },
         },
@@ -99,7 +111,7 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
           styleOverrides: {
             root: {
               borderRadius: 16,
-              border: `1px solid ${alpha('#ffffff', 0.08)}`,
+              border: `1px solid ${borderColor}`,
             },
           },
         },
@@ -112,7 +124,17 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
           styleOverrides: {
             root: {
               borderRadius: 16,
-              backgroundColor: alpha('#ffffff', 0.02),
+              backgroundColor: alpha('#ffffff', 0.04),
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: strongBorderColor,
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: grey[300],
+                borderWidth: 1,
+              },
+            },
+            notchedOutline: {
+              borderColor,
             },
           },
         },
@@ -120,6 +142,36 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
           styleOverrides: {
             root: {
               borderRadius: 16,
+              border: `1px solid transparent`,
+              '&:hover': {
+                backgroundColor: alpha('#ffffff', 0.06),
+                borderColor,
+              },
+              '&.Mui-selected': {
+                backgroundColor: alpha('#ffffff', 0.1),
+                borderColor: strongBorderColor,
+              },
+              '&.Mui-selected:hover': {
+                backgroundColor: alpha('#ffffff', 0.12),
+              },
+            },
+          },
+        },
+        MuiListItem: {
+          styleOverrides: {
+            root: {
+              borderRadius: 16,
+            },
+          },
+        },
+        MuiIconButton: {
+          styleOverrides: {
+            root: {
+              border: `1px solid ${alpha('#ffffff', 0.08)}`,
+              '&:hover': {
+                backgroundColor: alpha('#ffffff', 0.08),
+                borderColor,
+              },
             },
           },
         },
@@ -134,7 +186,8 @@ export default function AppThemeProvider(props: React.PropsWithChildren) {
               },
             },
             track: {
-              backgroundColor: grey[700],
+              backgroundColor: grey[800],
+              opacity: 1,
             },
           },
         },

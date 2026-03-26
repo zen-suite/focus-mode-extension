@@ -55,7 +55,12 @@ export default function SettingsList(props: {
     )
   }
   return (
-    <List className={props.className}>
+    <List
+      className={props.className}
+      sx={{
+        p: 0.5,
+      }}
+    >
       <SettingsListItem tab={SettingTab.BLOCKED_SITES} />
       <SettingsListItem tab={SettingTab.TAKE_A_BREAK} />
       <SettingsListItem tab={SettingTab.POMODORO} />

@@ -118,12 +118,18 @@ export function AppContent(props: IInjectedProps) {
       sx={{
         width: 400,
         minHeight: 420,
-        px: 2,
-        py: 2.5,
+        px: 2.5,
+        py: 3,
       }}
     >
-      <Stack spacing={2}>
-        <Box>
+      <Stack spacing={2.5}>
+        <Box
+          sx={{
+            pb: 2,
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
           <Typography color="text.secondary" variant="overline">
             Focus Mode
           </Typography>
@@ -133,7 +139,7 @@ export function AppContent(props: IInjectedProps) {
           </Typography>
         </Box>
 
-        <Paper sx={{ p: 2.25 }}>
+        <Paper sx={{ p: 2.5 }}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="caption">
               Current website
@@ -157,6 +163,9 @@ export function AppContent(props: IInjectedProps) {
           variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
           fullWidth
           size="large"
+          sx={{
+            py: 1.25,
+          }}
         >
           {buttonText}
         </Button>
@@ -175,7 +184,7 @@ export function AppContent(props: IInjectedProps) {
           />
         )}
 
-        <Paper sx={{ p: 2 }}>
+        <Paper sx={{ p: 2.25 }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box flexGrow={1}>
               <Typography variant="subtitle2">Extension settings</Typography>

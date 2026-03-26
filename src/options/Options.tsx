@@ -35,6 +35,7 @@ export default function Options(): JSX.Element {
             borderRight: 1,
             borderColor: 'divider',
             p: 3,
+            backgroundColor: 'rgba(255, 255, 255, 0.02)',
           }}
         >
           <Stack spacing={3}>
@@ -60,6 +61,7 @@ export default function Options(): JSX.Element {
             sx={{
               minHeight: '100%',
               p: 4,
+              backgroundColor: 'background.paper',
             }}
           >
             {settingSection}
