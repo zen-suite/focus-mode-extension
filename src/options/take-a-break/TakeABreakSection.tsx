@@ -9,7 +9,7 @@ import { TakeABreakItem } from './TakeABreakItem'
 export default function TakeABreakSection() {
   const storage = getBlockSiteStorage()
   const { enqueueSnackbar } = useSnackbar()
-  const { breakUntil, refetchSchema } = useBlockedSites()
+  const { breakUntil, pomodoro, refetchSchema } = useBlockedSites()
   return (
     <Box>
       <Box
@@ -20,6 +20,7 @@ export default function TakeABreakSection() {
         <TakeABreakAlert breakUntil={breakUntil} />
       </Box>
       <TakeABreakItem
+        disabled={pomodoro.isActive}
         onSetBreakTime={async (breakTime) => {
           await storage.setBreakTime(breakTime.toDate())
           await refetchSchema()

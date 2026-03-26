@@ -5,6 +5,7 @@ import BlockedSitesSection from './BlockedSitesSection'
 import styles from './Options.module.css'
 import SettingsList from './SettingsList'
 import { SettingTab } from './types'
+import PomodoroSection from './pomodoro/PomodoroSection'
 import TakeABreakSection from './take-a-break/TakeABreakSection'
 
 export default function Options(): JSX.Element {
@@ -18,6 +19,8 @@ export default function Options(): JSX.Element {
         return <BlockedSitesSection />
       case SettingTab.TAKE_A_BREAK:
         return <TakeABreakSection />
+      case SettingTab.POMODORO:
+        return <PomodoroSection />
       default:
         return <></>
     }

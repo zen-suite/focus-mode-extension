@@ -1,7 +1,12 @@
-import { Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
-import { getBlockSiteStorage, type IBlockedSite } from '../domain/block-site'
+import { PomodoroStatus } from '../components/PomodoroStatus'
+import {
+  getBlockSiteStorage,
+  type IBlockedSite,
+  type IPomodoroState,
+} from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import { getHostDomain, getHostUrl, isHttpProtocol } from '../util/host'
 
@@ -11,6 +16,7 @@ interface IInjectedProps {
   validDomain: boolean
   goToOptionsPage: () => void
   currentDomain: string | undefined
+  pomodoro: IPomodoroState
 }
 
 function useIsDomainValid() {
@@ -33,7 +39,11 @@ function useIsDomainValid() {
 }
 
 export default function AppContentContainer() {
-  const { blockedSites, refetchSchema: refetchBlockedSites } = useBlockedSites()
+  const {
+    blockedSites,
+    pomodoro,
+    refetchSchema: refetchBlockedSites,
+  } = useBlockedSites()
   const [currentDomain, setCurrentDomain] = useState<string | undefined>()
 
   useEffect(() => {
@@ -47,7 +57,6 @@ export default function AppContentContainer() {
     await getBlockSiteStorage().addBlockSite(currentDomain)
     await refetchBlockedSites()
   }
-
   const validDomain = useIsDomainValid()
 
   function goToOptionsPage() {
@@ -65,6 +74,7 @@ export default function AppContentContainer() {
       blockSite={blockWebsite}
       goToOptionsPage={goToOptionsPage}
       currentDomain={currentDomain}
+      pomodoro={pomodoro}
     />
   )
 }
@@ -123,6 +133,12 @@ export function AppContent(props: IInjectedProps) {
           >
             If you are still seeing the website, please try reloading it.
           </Typography>
+        )}
+
+        {props.pomodoro.isActive && (
+          <Box mt={2}>
+            <PomodoroStatus pomodoro={props.pomodoro} />
+          </Box>
         )}
 
         <AppLink

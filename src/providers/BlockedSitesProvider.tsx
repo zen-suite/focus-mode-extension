@@ -1,11 +1,17 @@
 import React, { useCallback, useContext, useEffect } from 'react'
-import { getBlockSiteStorage, type IBlockedSite } from '../domain/block-site'
+import {
+  getBlockSiteStorage,
+  PomodoroPhase,
+  type IBlockedSite,
+  type IPomodoroState,
+} from '../domain/block-site'
 import { useQuery } from '../hooks/useQuery'
 
 interface IBlockedSitesContext {
   blockedSites: IBlockedSite[]
   enabledBlocking: boolean
   breakUntil?: string
+  pomodoro: IPomodoroState
   refetchSchema: (searchValue?: string) => Promise<void>
   error: ReturnType<typeof useQuery>['error']
   loading: boolean
@@ -14,6 +20,12 @@ interface IBlockedSitesContext {
 const defaultContext: IBlockedSitesContext = {
   blockedSites: [],
   enabledBlocking: true,
+  pomodoro: {
+    isActive: false,
+    phase: PomodoroPhase.FOCUS,
+    focusDurationMinutes: 25,
+    breakDurationMinutes: 5,
+  },
   refetchSchema: async () => {},
   loading: false,
   error: undefined,
@@ -47,12 +59,39 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
     fetchData()
   }, [fetchData])
 
+  useEffect(() => {
+    function handleStorageChange(
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string
+    ) {
+      if (areaName !== 'local') {
+        return
+      }
+
+      if (
+        changes.blockedSites ||
+        changes.enableBlocking ||
+        changes.breakUntil ||
+        changes.pomodoro
+      ) {
+        fetchData()
+      }
+    }
+
+    chrome.storage.onChanged.addListener(handleStorageChange)
+
+    return () => {
+      chrome.storage.onChanged.removeListener(handleStorageChange)
+    }
+  }, [fetchData])
+
   return (
     <BlockedSitesContext.Provider
       value={{
         blockedSites: schema?.blockedSites.slice().reverse() ?? [],
         enabledBlocking: schema?.enableBlocking ?? true,
         breakUntil: schema?.breakUntil,
+        pomodoro: schema?.pomodoro ?? defaultContext.pomodoro,
         error,
         refetchSchema: fetchData,
         loading,

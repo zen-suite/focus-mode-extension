@@ -12,6 +12,7 @@ import { useState } from 'react'
 
 interface IProps {
   onSetBreakTime: (breakTime: Dayjs) => void | Promise<void>
+  disabled?: boolean
 }
 
 export default function (props: IProps) {
@@ -47,9 +48,15 @@ export function TakeABreakItem(props: IProps) {
           break, the extension will temporarily disable blocking for specified
           period of time and resume blocking after break is over.
         </Typography>
+        {props.disabled && (
+          <Typography color="warning.main" variant="body2" mb={2}>
+            Pomodoro is active and currently controls website blocking.
+          </Typography>
+        )}
         <Typography>Take a break till:</Typography>
         <TimePicker
           value={breakTime}
+          disabled={props.disabled}
           onChange={(val) => {
             setBreakTime(val)
           }}
@@ -68,6 +75,7 @@ export function TakeABreakItem(props: IProps) {
               <Button
                 sx={{ mr: 2 }}
                 key={text}
+                disabled={props.disabled}
                 onClick={() => {
                   onQuickButtonClick({ unit: unit as ManipulateType, value })
                 }}
@@ -85,6 +93,7 @@ export function TakeABreakItem(props: IProps) {
       >
         <Button
           variant="contained"
+          disabled={props.disabled}
           onClick={() => {
             if (!breakTime) {
               return

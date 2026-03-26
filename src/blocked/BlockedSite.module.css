@@ -1,3 +1,8 @@
+.page {
+  min-height: 100vh;
+  position: relative;
+}
+
 .background {
   background-image: url('/example.jpg');
   width: 100vw;
@@ -10,8 +15,46 @@
   filter: brightness(60%);
 }
 
-.headerBanner {
-  padding: 15px;
-  background-color: rgba(24, 24, 24, 0.6);
-  text-align: center;
+.content {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+.panel {
+  width: min(100%, 480px);
+  padding: 32px;
+  background-color: rgba(18, 18, 18, 0.78) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.eyebrow {
+  letter-spacing: 0.16em;
+}
+
+.pomodoroPanel {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.countdown {
+  font-variant-numeric: tabular-nums;
+  margin: 8px 0;
+}
+
+@media (max-width: 600px) {
+  .content {
+    align-items: flex-start;
+    padding: 20px;
+    padding-top: 56px;
+  }
+
+  .panel {
+    padding: 24px;
+  }
 }
