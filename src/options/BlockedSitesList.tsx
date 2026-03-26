@@ -1,4 +1,11 @@
-import { Box, CircularProgress, List, Paper, Typography } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  List,
+  Paper,
+  Typography,
+} from '@mui/material'
 import { type IBlockedSite } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import BlockedSiteItem from './BlockedSiteItem'
@@ -54,23 +61,18 @@ export function BlockedSitesList(props: IInjectedProps) {
           take effect.
         </Typography>
       )}
-      <List
-        sx={{
-          p: 1,
-          opacity: props.enabledBlocking ? 1 : 0.5,
-        }}
-      >
-        {props.blockedSites?.map((site) => {
-          return (
+      <List disablePadding sx={{ opacity: props.enabledBlocking ? 1 : 0.5 }}>
+        {props.blockedSites?.map((site, index) => (
+          <Box key={site.id}>
+            {index > 0 && <Divider />}
             <BlockedSiteItem
               blockedSite={site}
-              key={site.id}
               onBlockedSiteDeleted={async () => {
                 await props.refetchData()
               }}
             />
-          )
-        })}
+          </Box>
+        ))}
       </List>
     </Paper>
   )
