@@ -47,10 +47,12 @@ export function BlockedSiteItem(props: IProps & InjectedProps): JSX.Element {
           sx={{
             opacity: 0,
             transition: 'opacity 0.15s',
+            border: 'none',
             color: 'text.secondary',
             '&:hover': {
               color: 'text.primary',
               backgroundColor: 'transparent',
+              border: 'none',
             },
             '&:focus-visible': { outline: 'none' },
           }}

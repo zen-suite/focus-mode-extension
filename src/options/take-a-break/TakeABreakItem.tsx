@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@mui/material'
+import { Button, Card, CardActions, CardContent, Stack } from '@mui/material'
 import { TimePicker } from '@mui/x-date-pickers'
 import dayjs, { type ManipulateType, type Dayjs } from 'dayjs'
 import { useState } from 'react'
@@ -37,48 +30,32 @@ export function TakeABreakItem(props: IProps) {
   return (
     <Card>
       <CardContent>
-        <Typography
-          variant="caption"
-          sx={{
-            mb: 2,
-          }}
-          component="p"
-          color="text.secondary"
-        >
-          This section contains configuration for taking a break. By taking a
-          break, the extension will temporarily disable blocking for specified
-          period of time and resume blocking after break is over.
-        </Typography>
-        {props.disabled && (
-          <Box mb={2}>
+        <Stack spacing={2}>
+          {props.disabled && (
             <PomodoroActiveNotice
               title="Pomodoro is active"
               description="Pomodoro currently controls website blocking, so break controls are unavailable."
             />
-          </Box>
-        )}
-        <Typography>Take a break till:</Typography>
-        <TimePicker
-          value={breakTime}
-          disabled={props.disabled}
-          onChange={(val) => {
-            setBreakTime(val)
-          }}
-          sx={{
-            my: 2,
-          }}
-        />
-        <Box>
-          {[
-            { text: '+1 hour', unit: 'hour', value: 1 },
-            { text: '+45 minutes', unit: 'minute', value: 45 },
-            { text: '+30 minutes', unit: 'minute', value: 30 },
-            { text: '+15 minutes', unit: 'minute', value: 15 },
-          ].map(({ text, unit, value }) => {
-            return (
+          )}
+          <TimePicker
+            label="Blocking resumes at"
+            value={breakTime}
+            disabled={props.disabled}
+            onChange={(val) => {
+              setBreakTime(val)
+            }}
+            sx={{ width: '100%' }}
+          />
+          <Stack direction="row" flexWrap="wrap" gap={1}>
+            {[
+              { text: '+1 hour', unit: 'hour', value: 1 },
+              { text: '+45 min', unit: 'minute', value: 45 },
+              { text: '+30 min', unit: 'minute', value: 30 },
+              { text: '+15 min', unit: 'minute', value: 15 },
+            ].map(({ text, unit, value }) => (
               <Button
-                sx={{ mr: 2 }}
                 key={text}
+                size="small"
                 disabled={props.disabled}
                 onClick={() => {
                   onQuickButtonClick({ unit: unit as ManipulateType, value })
@@ -86,15 +63,11 @@ export function TakeABreakItem(props: IProps) {
               >
                 {text}
               </Button>
-            )
-          })}
-        </Box>
+            ))}
+          </Stack>
+        </Stack>
       </CardContent>
-      <CardActions
-        sx={{
-          px: 2,
-        }}
-      >
+      <CardActions sx={{ px: 2 }}>
         <Button
           variant="contained"
           disabled={props.disabled}
