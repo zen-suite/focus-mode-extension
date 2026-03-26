@@ -13,6 +13,7 @@ Focus mode chrome extension that you can block websites up to 5000 domains([dete
 1. Add a website to block
 2. Search blocked websites
 3. Disable blocking websites without losing added websites.
+4. Added Pomodoro feature
 
 ## Download and Install
 
