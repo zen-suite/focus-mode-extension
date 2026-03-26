@@ -1,4 +1,11 @@
-import { Box, CircularProgress, List, Typography } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  List,
+  Paper,
+  Typography,
+} from '@mui/material'
 import { type IBlockedSite } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import BlockedSiteItem from './BlockedSiteItem'
@@ -18,47 +25,55 @@ export default function () {
 
 export function BlockedSitesList(props: IInjectedProps) {
   if (props.loading) {
-    return <CircularProgress />
+    return (
+      <Box py={4} textAlign="center">
+        <CircularProgress />
+      </Box>
+    )
   }
 
   if (!props.blockedSites?.length && !props.loading) {
     return (
-      <Typography variant="subtitle2" padding="15px 10px">
-        You have not blocked any websites yet.
-      </Typography>
+      <Paper sx={{ px: 2.5, py: 3.5, textAlign: 'center' }}>
+        <Typography variant="subtitle2">
+          You have not blocked any websites yet.
+        </Typography>
+        <Typography color="text.secondary" mt={1} variant="body2">
+          Add a domain above to start filtering distractions.
+        </Typography>
+      </Paper>
     )
   }
   return (
-    <Box>
+    <Paper sx={{ overflow: 'hidden' }}>
       {!props.enabledBlocking && (
         <Typography
-          variant="subtitle1"
+          variant="subtitle2"
           sx={{
             textAlign: 'center',
+            borderBottom: 1,
+            borderColor: 'divider',
+            backgroundColor: 'rgba(255, 255, 255, 0.04)',
           }}
-          paddingY={1}
+          paddingY={1.5}
         >
           You have <strong>disabled</strong> website blocking. Changes will not
           take effect.
         </Typography>
       )}
-      <List
-        sx={{
-          opacity: props.enabledBlocking ? 1 : 0.5,
-        }}
-      >
-        {props.blockedSites?.map((site) => {
-          return (
+      <List disablePadding sx={{ opacity: props.enabledBlocking ? 1 : 0.5 }}>
+        {props.blockedSites?.map((site, index) => (
+          <Box key={site.id}>
+            {index > 0 && <Divider />}
             <BlockedSiteItem
               blockedSite={site}
-              key={site.id}
               onBlockedSiteDeleted={async () => {
                 await props.refetchData()
               }}
             />
-          )
-        })}
+          </Box>
+        ))}
       </List>
-    </Box>
+    </Paper>
   )
 }

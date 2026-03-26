@@ -24,7 +24,9 @@ The extension is designed to reduce distraction with minimal friction. The UI sh
 
 - Follow the existing dark theme as the default application tone.
 - Use a grayscale-only palette across the product UI. Colors should stay within black, white, and gray values.
-- Do not introduce accent colors for buttons, alerts, emphasis, charts, badges, or decorative details.
+- Do not introduce accent colors for buttons, emphasis, charts, badges, or decorative details.
+- Allow restrained semantic color in status and feedback surfaces when it materially improves clarity, such as success, warning, and error banners or alerts.
+- Keep semantic color use narrow and purposeful. It should communicate state, not become a general accent system.
 - Let contrast come from layout, typography, borders, opacity, and state treatment instead of color variation.
 - Treat strong visuals as rare emphasis. The blocked page background is the exception, not the default pattern for the rest of the product.
 
@@ -49,7 +51,7 @@ The extension is designed to reduce distraction with minimal friction. The UI sh
 ## Current Visual Characteristics
 
 - Dark mode is the default application theme.
-- The product theme should remain grayscale-only.
+- The product theme should remain grayscale-first, with limited semantic color exceptions for status feedback.
 - Typography uses Roboto through Material UI.
 - Buttons use Material UI defaults with no uppercase transformation.
 - Layouts are simple, panel-based, and rely on spacing and borders more than custom graphics.
@@ -58,7 +60,9 @@ The extension is designed to reduce distraction with minimal friction. The UI sh
 ## Guidance For New Features
 
 - Start from existing patterns in `src/popup/`, `src/options/`, `src/content/`, and `src/providers/AppThemeProvider.tsx`.
-- Keep all new UI colors inside the grayscale palette, including hover, selected, disabled, success, warning, and error-adjacent states unless the product direction is explicitly changed.
+- Keep all new UI colors inside the grayscale palette for general product UI, including hover, selected, and disabled states.
+- Semantic colors may be used for success, warning, and error status messaging when they improve recognition speed and reduce ambiguity.
+- When semantic colors are used, prefer muted, dark-theme-friendly tones and keep the surrounding layout, borders, and typography aligned with the grayscale system.
 - Reuse existing layout structure, spacing rhythm, and MUI component choices before adding new patterns.
 - If a feature needs a stronger visual treatment, keep it purposeful and tied to product meaning such as blocked state, urgency, or time-sensitive break actions.
 - If a new feature requires a meaningful shift in design direction, update this file so the change becomes an explicit shared standard.

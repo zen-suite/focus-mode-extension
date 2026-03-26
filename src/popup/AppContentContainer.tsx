@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
 import { PomodoroStatus } from '../components/PomodoroStatus'
@@ -114,42 +114,94 @@ export function AppContent(props: IInjectedProps) {
   }
 
   return (
-    <div className="App">
-      <h1>Zen mode extension</h1>
-      <div className="card">
+    <Box
+      sx={{
+        width: 400,
+        minHeight: 420,
+        px: 2.5,
+        py: 3,
+      }}
+    >
+      <Stack spacing={2.5}>
+        <Box
+          sx={{
+            pb: 2,
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
+          <Typography color="text.secondary" variant="overline">
+            Focus Mode
+          </Typography>
+          <Typography variant="h5">Block distractions quickly</Typography>
+          <Typography color="text.secondary" mt={0.75} variant="body2">
+            Add the current site without leaving your tab.
+          </Typography>
+        </Box>
+
+        <Paper sx={{ p: 2.5 }}>
+          <Stack spacing={1}>
+            <Typography color="text.secondary" variant="caption">
+              Current website
+            </Typography>
+            <Typography variant="h6">
+              {props.currentDomain ?? 'Unsupported page'}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+              {props.validDomain
+                ? isDomainAlreadyBlocked
+                  ? 'This domain is already in your blocked list.'
+                  : 'This page can be blocked immediately.'
+                : 'Only regular website pages can be blocked.'}
+            </Typography>
+          </Stack>
+        </Paper>
+
         <Button
           disabled={loading || !props.validDomain || isDomainAlreadyBlocked}
           onClick={blockSite}
-          variant="outlined"
+          variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
+          fullWidth
+          size="large"
+          sx={{
+            py: 1.25,
+          }}
         >
           {buttonText}
         </Button>
+
         {isDomainAlreadyBlocked && (
-          <Typography
-            variant="caption"
-            display="block"
-            marginTop={2}
-            color="gray"
-          >
-            If you are still seeing the website, please try reloading it.
+          <Typography color="text.secondary" variant="caption">
+            If the page is still visible, reload the tab so the blocking rule
+            applies.
           </Typography>
         )}
 
         {props.pomodoro.isActive && (
-          <Box mt={2}>
-            <PomodoroStatus pomodoro={props.pomodoro} />
-          </Box>
+          <PomodoroStatus
+            pomodoro={props.pomodoro}
+            inactiveMessage="Pomodoro is ready when you want timed focus sessions."
+          />
         )}
 
-        <AppLink
-          marginY={5}
-          display="block"
-          variant="subtitle2"
-          onClick={props.goToOptionsPage}
-        >
-          Go to options page
-        </AppLink>
-      </div>
-    </div>
+        <Paper sx={{ p: 2.25 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box flexGrow={1}>
+              <Typography variant="subtitle2">Extension settings</Typography>
+              <Typography color="text.secondary" variant="body2">
+                Manage blocked sites, breaks, and pomodoro timing.
+              </Typography>
+            </Box>
+            <AppLink
+              variant="subtitle2"
+              onClick={props.goToOptionsPage}
+              sx={{ whiteSpace: 'nowrap' }}
+            >
+              Open settings
+            </AppLink>
+          </Stack>
+        </Paper>
+      </Stack>
+    </Box>
   )
 }

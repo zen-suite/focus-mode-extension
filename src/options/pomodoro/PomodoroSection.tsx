@@ -70,15 +70,20 @@ export default function PomodoroSection() {
   }
 
   return (
-    <Box py={2}>
-      <Box mb={2}>
-        <PomodoroStatus pomodoro={pomodoro} />
+    <Stack spacing={3}>
+      <Box>
+        <Typography variant="h5">Pomodoro</Typography>
+        <Typography color="text.secondary" mt={1} variant="body2">
+          Alternate between timed focus sessions that block distracting sites
+          and short breaks that temporarily unblock them.
+        </Typography>
       </Box>
+      <PomodoroStatus pomodoro={pomodoro} />
       <Card>
         <CardContent>
           <Typography component="p" color="text.secondary" variant="caption">
-            Pomodoro alternates between a focus session that blocks distracting
-            sites and a break session that temporarily unblocks them.
+            Set how long each focus and break session lasts, then start the
+            timer.
           </Typography>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={2}>
             <TextField
@@ -116,6 +121,6 @@ export default function PomodoroSection() {
           )}
         </CardActions>
       </Card>
-    </Box>
+    </Stack>
   )
 }

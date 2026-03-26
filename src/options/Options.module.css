@@ -1,8 +1,8 @@
 .container {
   display: flex;
-  min-height: calc(100vh - 65px);
+  min-height: 100vh;
 }
 
 .content {
-  flex-grow: auto;
+  flex-grow: 1;
 }

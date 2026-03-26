@@ -43,9 +43,10 @@ describe(BlockedSitesSection, () => {
       />
     )
 
+    expect(screen.getByText('Pomodoro is active')).not.toBeNull()
     expect(
       screen.getByText(
-        'Pomodoro is active and currently controls website blocking.'
+        'Pomodoro currently controls website blocking, so the toggle below is temporarily unavailable.'
       )
     ).not.toBeNull()
 

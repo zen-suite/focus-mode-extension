@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { getBlockSiteStorage } from '../../domain/block-site'
 import { useBlockedSites } from '../../providers/BlockedSitesProvider'
@@ -11,14 +11,15 @@ export default function TakeABreakSection() {
   const { enqueueSnackbar } = useSnackbar()
   const { breakUntil, pomodoro, refetchSchema } = useBlockedSites()
   return (
-    <Box>
-      <Box
-        sx={{
-          my: 2,
-        }}
-      >
-        <TakeABreakAlert breakUntil={breakUntil} />
+    <Stack spacing={3}>
+      <Box>
+        <Typography variant="h5">Take a break</Typography>
+        <Typography color="text.secondary" mt={1} variant="body2">
+          Temporarily pause blocking until a set time. Blocking resumes
+          automatically when the break ends.
+        </Typography>
       </Box>
+      <TakeABreakAlert breakUntil={breakUntil} />
       <TakeABreakItem
         disabled={pomodoro.isActive}
         onSetBreakTime={async (breakTime) => {
@@ -32,6 +33,6 @@ export default function TakeABreakSection() {
           )
         }}
       />
-    </Box>
+    </Stack>
   )
 }

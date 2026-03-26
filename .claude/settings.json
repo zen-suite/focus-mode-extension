@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn fmt:write)",
+      "Bash(yarn lint:fix)",
+      "Bash(yarn typecheck:*)",
+      "Bash(yarn test:*)"
+    ]
+  }
+}

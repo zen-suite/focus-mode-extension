@@ -1,4 +1,12 @@
-import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  Paper,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material'
+import { PomodoroActiveNotice } from '../components/PomodoroActiveNotice'
 import { getBlockSiteStorage } from '../domain/block-site'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
@@ -33,44 +41,58 @@ export function BlockedSitesSection(props: {
   toggleSitesBlocking: (enable: boolean) => Promise<void>
 }) {
   return (
-    <>
-      <Box
-        sx={{
-          mt: 2,
-        }}
-      >
+    <Stack spacing={3}>
+      <Box>
+        <Typography variant="h5">Blocked sites</Typography>
+        <Typography color="text.secondary" mt={1} variant="body2">
+          Add websites to your list, search existing entries, and control
+          whether blocking is active right now.
+        </Typography>
+      </Box>
+      <Box>
         <TakeABreakAlert breakUntil={props.breakUntil} />
       </Box>
       {props.pomodoroActive && (
-        <Typography color="warning.main" variant="body2" mt={2}>
-          Pomodoro is active and currently controls website blocking.
-        </Typography>
-      )}
-      <Box py={2}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={props.enableBlocking}
-              disabled={props.pomodoroActive}
-              onChange={async (_event, checked) => {
-                await props.toggleSitesBlocking(checked)
-              }}
-            />
-          }
-          label={<Typography>Enable site blocking</Typography>}
+        <PomodoroActiveNotice
+          title="Pomodoro is active"
+          description="Pomodoro currently controls website blocking, so the toggle below is temporarily unavailable."
         />
-      </Box>
+      )}
+      <Paper sx={{ p: 2.5 }}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          justifyContent="space-between"
+        >
+          <Box>
+            <Typography variant="subtitle1">Blocking status</Typography>
+            <Typography color="text.secondary" variant="body2">
+              {props.enableBlocking
+                ? 'Distracting sites will be blocked when rules apply.'
+                : 'Blocking is paused until you re-enable it.'}
+            </Typography>
+          </Box>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={props.enableBlocking}
+                disabled={props.pomodoroActive}
+                onChange={async (_event, checked) => {
+                  await props.toggleSitesBlocking(checked)
+                }}
+              />
+            }
+            label={<Typography>Enable site blocking</Typography>}
+          />
+        </Stack>
+      </Paper>
       <Box>
         <AddOrSearchBlockedSite />
-        <Box
-          style={{
-            border: '0.5px solid gray',
-            borderRadius: '10px',
-          }}
-        >
+        <Box sx={{ mt: 2.5 }}>
           <BlockedSitesList />
         </Box>
       </Box>
-    </>
+    </Stack>
   )
 }
