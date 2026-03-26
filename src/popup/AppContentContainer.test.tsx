@@ -5,7 +5,7 @@ import { PomodoroPhase } from '../domain/block-site'
 import { AppContent } from './AppContentContainer'
 
 describe(AppContent, () => {
-  it('renders pomodoro start action when inactive', () => {
+  it('does not render pomodoro status when inactive', () => {
     render(
       <AppContent
         blockedSites={[]}
@@ -22,9 +22,7 @@ describe(AppContent, () => {
       />
     )
 
-    expect(
-      screen.getByText('Pomodoro is off. Focus 25 min, break 5 min.')
-    ).not.toBeNull()
+    expect(screen.queryByText(/Pomodoro is off/i)).toBeNull()
   })
 
   it('renders pomodoro status when active', () => {
