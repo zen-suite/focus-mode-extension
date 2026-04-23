@@ -70,7 +70,9 @@ describe(AppContent, () => {
       />
     )
 
-    expect(screen.getByRole('button', { name: /enable focus mode/i })).not.toBeNull()
+    expect(
+      screen.getByRole('button', { name: /enable focus mode/i })
+    ).not.toBeNull()
   })
 
   it('hides enable focus mode when blocking is enabled', () => {
@@ -92,6 +94,8 @@ describe(AppContent, () => {
       />
     )
 
-    expect(screen.queryByRole('button', { name: /enable focus mode/i })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: /enable focus mode/i })
+    ).toBeNull()
   })
 })

@@ -143,11 +143,11 @@ export function AppContent(props: IInjectedProps) {
       sx={{
         width: 400,
         minHeight: 420,
-        px: 2.5,
+        px: 2,
         py: 3,
       }}
     >
-      <Stack spacing={2.5}>
+      <Stack spacing={2}>
         <Box
           sx={{
             pb: 2,
@@ -165,9 +165,9 @@ export function AppContent(props: IInjectedProps) {
         </Box>
 
         {props.pomodoro.isActive && (
-          <Paper sx={{ p: 2.5 }}>
-            <Stack spacing={1.5}>
-              <Typography variant="h5">Pomodoro is active</Typography>
+          <Paper sx={{ p: 2 }}>
+            <Stack spacing={1}>
+              <Typography variant="h6">Pomodoro is active</Typography>
               <Typography color="text.secondary" variant="body2">
                 Pomodoro currently controls site blocking.
               </Typography>
@@ -179,8 +179,8 @@ export function AppContent(props: IInjectedProps) {
           </Paper>
         )}
 
-        <Paper sx={{ p: 2.5 }}>
-          <Stack spacing={1.5}>
+        <Paper sx={{ p: 2 }}>
+          <Stack spacing={1}>
             <Stack spacing={1}>
               <Typography color="text.secondary" variant="caption">
                 Current website
@@ -198,7 +198,7 @@ export function AppContent(props: IInjectedProps) {
             </Stack>
 
             {focusModeOff && (
-              <Stack spacing={1.5}>
+              <Stack spacing={1}>
                 <Typography color="text.secondary" variant="body2">
                   Focus mode is off. Your blocked sites list is not enforced
                   until you turn it back on.
@@ -238,7 +238,7 @@ export function AppContent(props: IInjectedProps) {
             </Typography>
           )}
         </Stack>
-        <Paper sx={{ p: 2.25 }}>
+        <Paper sx={{ p: 2 }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box flexGrow={1}>
               <Typography variant="subtitle2">Extension settings</Typography>
