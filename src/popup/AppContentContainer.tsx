@@ -165,93 +165,80 @@ export function AppContent(props: IInjectedProps) {
           </Typography>
         </Box>
 
-        {focusModeOff && (
-          <Stack spacing={1.5}>
-            {props.pomodoro.isActive && (
-              <PomodoroActiveNotice
-                title="Pomodoro is active"
-                description="Pomodoro currently controls site blocking, so you can't turn focus mode on from here right now."
+        {props.pomodoro.isActive && (
+          <Paper sx={{ p: 2.5 }}>
+            <Stack spacing={1.5}>
+              <Typography variant="h5">Pomodoro is active</Typography>
+              <Typography color="text.secondary" variant="body2">
+                Pomodoro currently controls site blocking.
+              </Typography>
+              <PomodoroStatus
+                pomodoro={props.pomodoro}
+                inactiveMessage="Pomodoro is ready when you want timed focus sessions."
               />
-            )}
-            <Paper
-              variant="outlined"
-              sx={{
-                p: 2.25,
-                borderStyle: 'dashed',
-                bgcolor: (theme) =>
-                  theme.palette.mode === 'dark'
-                    ? 'action.hover'
-                    : 'action.selected',
-              }}
-            >
+            </Stack>
+          </Paper>
+        )}
+
+        <Paper sx={{ p: 2.5 }}>
+          <Stack spacing={1.5}>
+            <Stack spacing={1}>
+              <Typography color="text.secondary" variant="caption">
+                Current website
+              </Typography>
+              <Typography variant="h6">
+                {props.currentDomain ?? 'Unsupported page'}
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                {props.validDomain
+                  ? isDomainAlreadyBlocked
+                    ? 'This domain is already in your blocked list.'
+                    : 'This page can be blocked immediately.'
+                  : 'Only regular website pages can be blocked.'}
+              </Typography>
+            </Stack>
+
+            {focusModeOff && (
               <Stack spacing={1.5}>
-                <Box>
-                  <Typography variant="subtitle1">Focus mode is off</Typography>
-                  <Typography color="text.secondary" variant="body2" mt={0.5}>
-                    Your blocked sites list is not being enforced until you turn
-                    focus mode back on.
-                  </Typography>
-                </Box>
+                <Typography color="text.secondary" variant="body2">
+                  Focus mode is off. Your blocked sites list is not enforced
+                  until you turn it back on.
+                </Typography>
                 <Button
                   disabled={enablingFocus || props.pomodoro.isActive}
                   onClick={onEnableFocusMode}
-                  variant="contained"
-                  color="primary"
+                  variant="outlined"
                   fullWidth
                   size="large"
                 >
                   {enablingFocus ? 'Turning on…' : 'Enable focus mode'}
                 </Button>
               </Stack>
-            </Paper>
-          </Stack>
-        )}
-
-        <Paper sx={{ p: 2.5 }}>
-          <Stack spacing={1}>
-            <Typography color="text.secondary" variant="caption">
-              Current website
-            </Typography>
-            <Typography variant="h6">
-              {props.currentDomain ?? 'Unsupported page'}
-            </Typography>
-            <Typography color="text.secondary" variant="body2">
-              {props.validDomain
-                ? isDomainAlreadyBlocked
-                  ? 'This domain is already in your blocked list.'
-                  : 'This page can be blocked immediately.'
-                : 'Only regular website pages can be blocked.'}
-            </Typography>
+            )}
           </Stack>
         </Paper>
 
-        <Button
-          disabled={loading || !props.validDomain || isDomainAlreadyBlocked}
-          onClick={blockSite}
-          variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
-          fullWidth
-          size="large"
-          sx={{
-            py: 1.25,
-          }}
-        >
-          {buttonText}
-        </Button>
+        <Stack spacing={1}>
+          <Button
+            disabled={loading || !props.validDomain || isDomainAlreadyBlocked}
+            onClick={blockSite}
+            variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
+            fullWidth
+            size="large"
+            sx={{
+              py: 1.25,
+            }}
+          >
+            {buttonText}
+          </Button>
 
-        {isDomainAlreadyBlocked && (
-          <Typography color="text.secondary" variant="caption">
-            If the page is still visible, reload the tab so the blocking rule
-            applies.
-          </Typography>
-        )}
-
-        {props.pomodoro.isActive && (
-          <PomodoroStatus
-            pomodoro={props.pomodoro}
-            inactiveMessage="Pomodoro is ready when you want timed focus sessions."
-          />
-        )}
-
+          {isDomainAlreadyBlocked && !focusModeOff && (
+            <Typography color="text.secondary" variant="caption">
+              If the page is still visible, reload the tab so the blocking rule
+              applies.
+            </Typography>
+          )}
+        </Stack>
         <Paper sx={{ p: 2.25 }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box flexGrow={1}>
