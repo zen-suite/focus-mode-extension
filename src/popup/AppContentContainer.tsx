@@ -2,6 +2,7 @@ import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
 import { PomodoroStatus } from '../components/PomodoroStatus'
+import { PomodoroActiveNotice } from '../components/PomodoroActiveNotice'
 import {
   getBlockSiteStorage,
   type IBlockedSite,
@@ -17,6 +18,8 @@ interface IInjectedProps {
   goToOptionsPage: () => void
   currentDomain: string | undefined
   pomodoro: IPomodoroState
+  enabledBlocking: boolean
+  enableFocusMode: () => Promise<void>
 }
 
 function useIsDomainValid() {
@@ -42,6 +45,7 @@ export default function AppContentContainer() {
   const {
     blockedSites,
     pomodoro,
+    enabledBlocking,
     refetchSchema: refetchBlockedSites,
   } = useBlockedSites()
   const [currentDomain, setCurrentDomain] = useState<string | undefined>()
@@ -67,6 +71,11 @@ export default function AppContentContainer() {
     }
   }
 
+  async function enableFocusMode() {
+    await getBlockSiteStorage().toggleSitesBlock(true)
+    await refetchBlockedSites()
+  }
+
   return (
     <AppContent
       validDomain={validDomain}
@@ -75,12 +84,15 @@ export default function AppContentContainer() {
       goToOptionsPage={goToOptionsPage}
       currentDomain={currentDomain}
       pomodoro={pomodoro}
+      enabledBlocking={enabledBlocking}
+      enableFocusMode={enableFocusMode}
     />
   )
 }
 
 export function AppContent(props: IInjectedProps) {
   const [loading, setLoading] = useState(false)
+  const [enablingFocus, setEnablingFocus] = useState(false)
 
   const isDomainAlreadyBlocked = useMemo(() => {
     return Boolean(
@@ -113,6 +125,20 @@ export function AppContent(props: IInjectedProps) {
     }
   }
 
+  async function onEnableFocusMode() {
+    try {
+      setEnablingFocus(true)
+      await props.enableFocusMode()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    } finally {
+      setEnablingFocus(false)
+    }
+  }
+
+  const focusModeOff = !props.enabledBlocking
+
   return (
     <Box
       sx={{
@@ -138,6 +164,48 @@ export function AppContent(props: IInjectedProps) {
             Add the current site without leaving your tab.
           </Typography>
         </Box>
+
+        {focusModeOff && (
+          <Stack spacing={1.5}>
+            {props.pomodoro.isActive && (
+              <PomodoroActiveNotice
+                title="Pomodoro is active"
+                description="Pomodoro currently controls site blocking, so you can't turn focus mode on from here right now."
+              />
+            )}
+            <Paper
+              variant="outlined"
+              sx={{
+                p: 2.25,
+                borderStyle: 'dashed',
+                bgcolor: (theme) =>
+                  theme.palette.mode === 'dark'
+                    ? 'action.hover'
+                    : 'action.selected',
+              }}
+            >
+              <Stack spacing={1.5}>
+                <Box>
+                  <Typography variant="subtitle1">Focus mode is off</Typography>
+                  <Typography color="text.secondary" variant="body2" mt={0.5}>
+                    Your blocked sites list is not being enforced until you turn
+                    focus mode back on.
+                  </Typography>
+                </Box>
+                <Button
+                  disabled={enablingFocus || props.pomodoro.isActive}
+                  onClick={onEnableFocusMode}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  size="large"
+                >
+                  {enablingFocus ? 'Turning on…' : 'Enable focus mode'}
+                </Button>
+              </Stack>
+            </Paper>
+          </Stack>
+        )}
 
         <Paper sx={{ p: 2.5 }}>
           <Stack spacing={1}>
