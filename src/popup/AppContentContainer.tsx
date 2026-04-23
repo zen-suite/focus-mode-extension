@@ -17,6 +17,8 @@ interface IInjectedProps {
   goToOptionsPage: () => void
   currentDomain: string | undefined
   pomodoro: IPomodoroState
+  enabledBlocking: boolean
+  enableFocusMode: () => Promise<void>
 }
 
 function useIsDomainValid() {
@@ -42,6 +44,7 @@ export default function AppContentContainer() {
   const {
     blockedSites,
     pomodoro,
+    enabledBlocking,
     refetchSchema: refetchBlockedSites,
   } = useBlockedSites()
   const [currentDomain, setCurrentDomain] = useState<string | undefined>()
@@ -67,6 +70,11 @@ export default function AppContentContainer() {
     }
   }
 
+  async function enableFocusMode() {
+    await getBlockSiteStorage().toggleSitesBlock(true)
+    await refetchBlockedSites()
+  }
+
   return (
     <AppContent
       validDomain={validDomain}
@@ -75,12 +83,15 @@ export default function AppContentContainer() {
       goToOptionsPage={goToOptionsPage}
       currentDomain={currentDomain}
       pomodoro={pomodoro}
+      enabledBlocking={enabledBlocking}
+      enableFocusMode={enableFocusMode}
     />
   )
 }
 
 export function AppContent(props: IInjectedProps) {
   const [loading, setLoading] = useState(false)
+  const [enablingFocus, setEnablingFocus] = useState(false)
 
   const isDomainAlreadyBlocked = useMemo(() => {
     return Boolean(
@@ -113,16 +124,30 @@ export function AppContent(props: IInjectedProps) {
     }
   }
 
+  async function onEnableFocusMode() {
+    try {
+      setEnablingFocus(true)
+      await props.enableFocusMode()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    } finally {
+      setEnablingFocus(false)
+    }
+  }
+
+  const focusModeOff = !props.enabledBlocking
+
   return (
     <Box
       sx={{
         width: 400,
         minHeight: 420,
-        px: 2.5,
+        px: 2,
         py: 3,
       }}
     >
-      <Stack spacing={2.5}>
+      <Stack spacing={2}>
         <Box
           sx={{
             pb: 2,
@@ -139,52 +164,81 @@ export function AppContent(props: IInjectedProps) {
           </Typography>
         </Box>
 
-        <Paper sx={{ p: 2.5 }}>
+        {props.pomodoro.isActive && (
+          <Paper sx={{ p: 2 }}>
+            <Stack spacing={1}>
+              <Typography variant="h6">Pomodoro is active</Typography>
+              <Typography color="text.secondary" variant="body2">
+                Pomodoro currently controls site blocking.
+              </Typography>
+              <PomodoroStatus
+                pomodoro={props.pomodoro}
+                inactiveMessage="Pomodoro is ready when you want timed focus sessions."
+              />
+            </Stack>
+          </Paper>
+        )}
+
+        <Paper sx={{ p: 2 }}>
           <Stack spacing={1}>
-            <Typography color="text.secondary" variant="caption">
-              Current website
-            </Typography>
-            <Typography variant="h6">
-              {props.currentDomain ?? 'Unsupported page'}
-            </Typography>
-            <Typography color="text.secondary" variant="body2">
-              {props.validDomain
-                ? isDomainAlreadyBlocked
-                  ? 'This domain is already in your blocked list.'
-                  : 'This page can be blocked immediately.'
-                : 'Only regular website pages can be blocked.'}
-            </Typography>
+            <Stack spacing={1}>
+              <Typography color="text.secondary" variant="caption">
+                Current website
+              </Typography>
+              <Typography variant="h6">
+                {props.currentDomain ?? 'Unsupported page'}
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                {props.validDomain
+                  ? isDomainAlreadyBlocked
+                    ? 'This domain is already in your blocked list.'
+                    : 'This page can be blocked immediately.'
+                  : 'Only regular website pages can be blocked.'}
+              </Typography>
+            </Stack>
+
+            {focusModeOff && (
+              <Stack spacing={1}>
+                <Typography color="text.secondary" variant="body2">
+                  Focus mode is off. Your blocked sites list is not enforced
+                  until you turn it back on.
+                </Typography>
+                <Button
+                  disabled={enablingFocus || props.pomodoro.isActive}
+                  onClick={onEnableFocusMode}
+                  variant="outlined"
+                  fullWidth
+                  size="large"
+                >
+                  {enablingFocus ? 'Turning on…' : 'Enable focus mode'}
+                </Button>
+              </Stack>
+            )}
           </Stack>
         </Paper>
 
-        <Button
-          disabled={loading || !props.validDomain || isDomainAlreadyBlocked}
-          onClick={blockSite}
-          variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
-          fullWidth
-          size="large"
-          sx={{
-            py: 1.25,
-          }}
-        >
-          {buttonText}
-        </Button>
+        <Stack spacing={1}>
+          <Button
+            disabled={loading || !props.validDomain || isDomainAlreadyBlocked}
+            onClick={blockSite}
+            variant={isDomainAlreadyBlocked ? 'outlined' : 'contained'}
+            fullWidth
+            size="large"
+            sx={{
+              py: 1.25,
+            }}
+          >
+            {buttonText}
+          </Button>
 
-        {isDomainAlreadyBlocked && (
-          <Typography color="text.secondary" variant="caption">
-            If the page is still visible, reload the tab so the blocking rule
-            applies.
-          </Typography>
-        )}
-
-        {props.pomodoro.isActive && (
-          <PomodoroStatus
-            pomodoro={props.pomodoro}
-            inactiveMessage="Pomodoro is ready when you want timed focus sessions."
-          />
-        )}
-
-        <Paper sx={{ p: 2.25 }}>
+          {isDomainAlreadyBlocked && !focusModeOff && (
+            <Typography color="text.secondary" variant="caption">
+              If the page is still visible, reload the tab so the blocking rule
+              applies.
+            </Typography>
+          )}
+        </Stack>
+        <Paper sx={{ p: 2 }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box flexGrow={1}>
               <Typography variant="subtitle2">Extension settings</Typography>
