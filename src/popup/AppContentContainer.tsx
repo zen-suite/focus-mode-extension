@@ -2,7 +2,6 @@ import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import AppLink from '../components/AppLink'
 import { PomodoroStatus } from '../components/PomodoroStatus'
-import { PomodoroActiveNotice } from '../components/PomodoroActiveNotice'
 import {
   getBlockSiteStorage,
   type IBlockedSite,
