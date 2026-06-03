@@ -19,7 +19,7 @@ focus-mode-extension/
 ├── vite.config.ts       # Vite + CRX build and Vitest
 ├── vitest.setup.ts      # Test mocks (Chrome APIs)
 ├── package.json         # Scripts and dependencies
-├── AGENTS.md            # Contributor / AI agent guide (architecture, commands)
+├── AGENTS.md            # Contributor / AI agent guide (commands, testing, design)
 ├── DESIGN.md            # UI design reference (grayscale, patterns)
 └── dist/                # Production build output (generated; load unpacked in Chrome)
 ```
@@ -169,4 +169,4 @@ flowchart LR
 3. **UI contexts** read via providers or storage helpers and talk to the worker through **`src/util/messages.ts`**.
 4. **Blocked page** is the redirect target when a site is blocked.
 
-For commands, testing expectations, and deeper architecture notes, see **`AGENTS.md`** at the repository root.
+For design guidance, commands, testing expectations, and the precheck workflow, see **`AGENTS.md`** at the repository root.
