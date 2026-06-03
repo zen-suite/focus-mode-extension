@@ -173,6 +173,30 @@ describe(BlockSiteStorage, () => {
     })
   })
 
+  it('resets friction level and disable count', async () => {
+    const storage = new BlockSiteStorage(storageInstance as never)
+
+    for (let index = 0; index < 6; index += 1) {
+      await storage.recordFrictionDisableSuccess()
+    }
+    expect(await storage.getFrictionSettings()).toMatchObject({
+      frictionDisableCount: 6,
+      frictionLevel: 2,
+    })
+
+    await storage.resetFrictionLevel()
+
+    expect(storageInstance.update).toHaveBeenCalledWith('frictionLevel', 1)
+    expect(storageInstance.update).toHaveBeenCalledWith(
+      'frictionDisableCount',
+      0
+    )
+    expect(await storage.getFrictionSettings()).toMatchObject({
+      frictionDisableCount: 0,
+      frictionLevel: 1,
+    })
+  })
+
   it('persists enforce strong friction toggle', async () => {
     const storage = new BlockSiteStorage(storageInstance as never)
 

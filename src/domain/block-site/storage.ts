@@ -47,7 +47,13 @@ export interface IBlockedSiteSchema {
   pomodoro: IPomodoroState
   enforceStrongFriction: boolean
   frictionLevel: number
+  /**
+   * Current number of disables before next friction level increase
+   */
   frictionDisableCount: number
+  /**
+   * number of disables required to increase friction level
+   */
   frictionDisablesPerLevel: number
 }
 
@@ -176,6 +182,17 @@ export class BlockSiteStorage {
     await this.storageInstance.update(
       'frictionDisablesPerLevel',
       normalizeFrictionDisablesPerLevel(disablesPerLevel)
+    )
+  }
+
+  async resetFrictionLevel() {
+    await this.storageInstance.update(
+      'frictionLevel',
+      initialBlockedSiteSchema.frictionLevel
+    )
+    await this.storageInstance.update(
+      'frictionDisableCount',
+      initialBlockedSiteSchema.frictionDisableCount
     )
   }
 
