@@ -2,6 +2,11 @@ import { differenceBy, uniqBy } from 'lodash'
 import dayjs from 'dayjs'
 import { getStorageInstance } from '../../storage'
 import {
+  DEFAULT_FRICTION_DISABLES_PER_LEVEL,
+  normalizeFrictionDisablesPerLevel,
+  shouldIncreaseFrictionLevel,
+} from '../strong-friction/friction-level'
+import {
   addBlockedSite,
   batchAddBlockedSites,
   filterBlockedSitesByDomain,
@@ -28,16 +33,37 @@ export interface IPomodoroState {
   phaseEndsAt?: string
 }
 
+export interface IFrictionSettings {
+  enforceStrongFriction: boolean
+  frictionLevel: number
+  frictionDisableCount: number
+  frictionDisablesPerLevel: number
+}
+
 export interface IBlockedSiteSchema {
   enableBlocking: boolean
   blockedSites: IBlockedSite[]
   breakUntil?: string
   pomodoro: IPomodoroState
+  enforceStrongFriction: boolean
+  frictionLevel: number
+  /**
+   * Current number of disables before next friction level increase
+   */
+  frictionDisableCount: number
+  /**
+   * number of disables required to increase friction level
+   */
+  frictionDisablesPerLevel: number
 }
 
 export const initialBlockedSiteSchema: IBlockedSiteSchema = {
   enableBlocking: true,
   blockedSites: [],
+  enforceStrongFriction: false,
+  frictionLevel: 1,
+  frictionDisableCount: 0,
+  frictionDisablesPerLevel: DEFAULT_FRICTION_DISABLES_PER_LEVEL,
   pomodoro: {
     isActive: false,
     phase: PomodoroPhase.FOCUS,
@@ -129,7 +155,68 @@ export class BlockSiteStorage {
   }
 
   async get(): Promise<IBlockedSiteSchema> {
-    return (await this.storageInstance.get()) ?? initialBlockedSiteSchema
+    const stored = await this.storageInstance.get()
+    return {
+      ...initialBlockedSiteSchema,
+      ...stored,
+    }
+  }
+
+  async getFrictionSettings(): Promise<IFrictionSettings> {
+    const schema = await this.get()
+    return {
+      enforceStrongFriction: schema.enforceStrongFriction ?? false,
+      frictionLevel: schema.frictionLevel ?? 1,
+      frictionDisableCount: schema.frictionDisableCount ?? 0,
+      frictionDisablesPerLevel: normalizeFrictionDisablesPerLevel(
+        schema.frictionDisablesPerLevel
+      ),
+    }
+  }
+
+  async setEnforceStrongFriction(enabled: boolean) {
+    await this.storageInstance.update('enforceStrongFriction', enabled)
+  }
+
+  async setFrictionDisablesPerLevel(disablesPerLevel: number) {
+    await this.storageInstance.update(
+      'frictionDisablesPerLevel',
+      normalizeFrictionDisablesPerLevel(disablesPerLevel)
+    )
+  }
+
+  async resetFrictionLevel() {
+    await this.storageInstance.update(
+      'frictionLevel',
+      initialBlockedSiteSchema.frictionLevel
+    )
+    await this.storageInstance.update(
+      'frictionDisableCount',
+      initialBlockedSiteSchema.frictionDisableCount
+    )
+  }
+
+  async recordFrictionDisableSuccess() {
+    const schema = await this.get()
+    const disablesPerLevel = normalizeFrictionDisablesPerLevel(
+      schema.frictionDisablesPerLevel
+    )
+    const frictionDisableCount = (schema.frictionDisableCount ?? 0) + 1
+    const increasesLevel = shouldIncreaseFrictionLevel(
+      frictionDisableCount,
+      disablesPerLevel
+    )
+    const frictionLevel = increasesLevel
+      ? (schema.frictionLevel ?? 1) + 1
+      : schema.frictionLevel ?? 1
+
+    await this.storageInstance.update(
+      'frictionDisableCount',
+      frictionDisableCount
+    )
+    if (increasesLevel) {
+      await this.storageInstance.update('frictionLevel', frictionLevel)
+    }
   }
 
   async update<K extends keyof IBlockedSiteSchema>(

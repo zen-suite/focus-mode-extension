@@ -6,8 +6,11 @@ import {
   Switch,
   Typography,
 } from '@mui/material'
+import { useState } from 'react'
 import { PomodoroActiveNotice } from '../components/PomodoroActiveNotice'
+import { StrongFrictionDialog } from '../components/StrongFrictionDialog'
 import { getBlockSiteStorage } from '../domain/block-site'
+import { getProblemsForLevel } from '../domain/strong-friction/friction-level'
 import { useBlockedSites } from '../providers/BlockedSitesProvider'
 import AddOrSearchBlockedSite from './AddOrSearchBlockedSite'
 import BlockedSitesList from './BlockedSitesList'
@@ -16,21 +19,59 @@ import TakeABreakAlert from './take-a-break/TakeABreakAlert'
 const blockedSiteStorage = getBlockSiteStorage()
 
 export default function () {
-  const { refetchSchema, enabledBlocking, breakUntil, pomodoro } =
-    useBlockedSites()
+  const {
+    refetchSchema,
+    enabledBlocking,
+    enforceStrongFriction,
+    frictionLevel,
+    breakUntil,
+    pomodoro,
+  } = useBlockedSites()
+  const [frictionDialogOpen, setFrictionDialogOpen] = useState(false)
 
-  async function onSiteBlockingToggle(checked: boolean) {
-    await blockedSiteStorage.toggleSitesBlock(checked)
+  async function disableBlocking() {
+    await blockedSiteStorage.toggleSitesBlock(false)
     await refetchSchema()
   }
 
+  async function onSiteBlockingToggle(checked: boolean) {
+    if (checked) {
+      await blockedSiteStorage.toggleSitesBlock(true)
+      await refetchSchema()
+      return
+    }
+
+    if (enforceStrongFriction) {
+      setFrictionDialogOpen(true)
+      return
+    }
+
+    await disableBlocking()
+  }
+
+  async function onFrictionConfirm() {
+    await blockedSiteStorage.recordFrictionDisableSuccess()
+    await disableBlocking()
+    setFrictionDialogOpen(false)
+  }
+
   return (
-    <BlockedSitesSection
-      enableBlocking={enabledBlocking}
-      breakUntil={breakUntil}
-      pomodoroActive={pomodoro.isActive}
-      toggleSitesBlocking={onSiteBlockingToggle}
-    />
+    <>
+      <BlockedSitesSection
+        enableBlocking={enabledBlocking}
+        breakUntil={breakUntil}
+        pomodoroActive={pomodoro.isActive}
+        toggleSitesBlocking={onSiteBlockingToggle}
+      />
+      <StrongFrictionDialog
+        open={frictionDialogOpen}
+        problemCount={getProblemsForLevel(frictionLevel)}
+        onCancel={() => {
+          setFrictionDialogOpen(false)
+        }}
+        onConfirm={onFrictionConfirm}
+      />
+    </>
   )
 }
 

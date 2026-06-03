@@ -13,5 +13,6 @@ describe(SettingsList, () => {
     )
     expect(screen.getByText('Blocked sites')).not.toBeNull()
     expect(screen.getByText('Pomodoro')).not.toBeNull()
+    expect(screen.getByText('Settings')).not.toBeNull()
   })
 })

@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react'
 import {
+  BLOCKED_SITE_TABLE_NAME,
   getBlockSiteStorage,
   PomodoroPhase,
   type IBlockedSite,
@@ -10,6 +11,10 @@ import { useQuery } from '../hooks/useQuery'
 interface IBlockedSitesContext {
   blockedSites: IBlockedSite[]
   enabledBlocking: boolean
+  enforceStrongFriction: boolean
+  frictionLevel: number
+  frictionDisableCount: number
+  frictionDisablesPerLevel: number
   breakUntil?: string
   pomodoro: IPomodoroState
   refetchSchema: (searchValue?: string) => Promise<void>
@@ -20,6 +25,10 @@ interface IBlockedSitesContext {
 const defaultContext: IBlockedSitesContext = {
   blockedSites: [],
   enabledBlocking: true,
+  enforceStrongFriction: false,
+  frictionLevel: 1,
+  frictionDisableCount: 0,
+  frictionDisablesPerLevel: 5,
   pomodoro: {
     isActive: false,
     phase: PomodoroPhase.FOCUS,
@@ -68,12 +77,7 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
         return
       }
 
-      if (
-        changes.blockedSites ||
-        changes.enableBlocking ||
-        changes.breakUntil ||
-        changes.pomodoro
-      ) {
+      if (changes[BLOCKED_SITE_TABLE_NAME]) {
         fetchData()
       }
     }
@@ -90,6 +94,10 @@ export function BlockedSitesProvider(props: React.PropsWithChildren<any>) {
       value={{
         blockedSites: schema?.blockedSites.slice().reverse() ?? [],
         enabledBlocking: schema?.enableBlocking ?? true,
+        enforceStrongFriction: schema?.enforceStrongFriction ?? false,
+        frictionLevel: schema?.frictionLevel ?? 1,
+        frictionDisableCount: schema?.frictionDisableCount ?? 0,
+        frictionDisablesPerLevel: schema?.frictionDisablesPerLevel ?? 5,
         breakUntil: schema?.breakUntil,
         pomodoro: schema?.pomodoro ?? defaultContext.pomodoro,
         error,

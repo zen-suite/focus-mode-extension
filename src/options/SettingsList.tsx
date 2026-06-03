@@ -22,6 +22,10 @@ const SETTING_META: Record<SettingTab, { title: string; description: string }> =
       title: 'Pomodoro',
       description: 'Run timed focus and break sessions.',
     },
+    [SettingTab.SETTINGS]: {
+      title: 'Settings',
+      description: 'Strong friction and other extension preferences.',
+    },
   }
 
 export default function SettingsList(props: {
@@ -64,6 +68,7 @@ export default function SettingsList(props: {
       <SettingsListItem tab={SettingTab.BLOCKED_SITES} />
       <SettingsListItem tab={SettingTab.TAKE_A_BREAK} />
       <SettingsListItem tab={SettingTab.POMODORO} />
+      <SettingsListItem tab={SettingTab.SETTINGS} />
     </List>
   )
 }
