@@ -65,8 +65,5 @@ Tests are co-located with source files (`.test.ts` / `.test.tsx`). The test envi
 Always run the following and fix all failures before considering a task done:
 
 ```bash
-yarn fmt:write   # auto-formats — run first so lint sees clean files
-yarn lint:fix    # auto-fix lint issues, then manually fix any remaining errors
-yarn typecheck  # type-check
-yarn test        # all tests must pass
+yarn precheck
 ```
